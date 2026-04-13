@@ -1,7 +1,7 @@
 import VoteSuccessPanel from "@/components/VoteSuccessPanel";
 
 export const metadata = {
-  title: "Voto Registrado | Sistema de Votacion Escolar",
+  title: "Voto registrado | Brüning School",
 };
 
 export default function VoteSuccessPage() {

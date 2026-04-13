@@ -37,7 +37,7 @@ export default function VoteCard({
 
   return (
     <label
-      className={`group block cursor-pointer overflow-hidden rounded-[1.75rem] border p-4 transition duration-200 ${
+      className={`group relative block cursor-pointer overflow-hidden rounded-[1.75rem] border p-4 transition duration-200 ${
         selected
           ? "border-slate-900 bg-slate-950 text-white shadow-[0_24px_55px_rgba(15,23,42,0.22)]"
           : "border-slate-200 bg-white text-slate-900 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_22px_45px_rgba(15,23,42,0.12)]"
@@ -49,7 +49,12 @@ export default function VoteCard({
         value={value}
         checked={selected}
         onChange={() => onChange(value)}
-        className="sr-only"
+        className="peer sr-only"
+        aria-label={`Seleccionar ${title}`}
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-[1.75rem] ring-2 ring-sky-500/80 opacity-0 transition peer-focus-visible:opacity-100"
       />
 
       <div className="relative overflow-hidden rounded-[1.35rem] p-5" style={coverStyle}>
@@ -59,7 +64,7 @@ export default function VoteCard({
         <div className="relative flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/70">
-              {isBlank ? "Opcion especial" : "Comite activo"}
+              {isBlank ? "Opción especial" : "Comité activo"}
             </p>
             <div className="mt-4 inline-flex h-[3.75rem] w-[3.75rem] items-center justify-center rounded-[1.1rem] border border-white/20 bg-white/[0.14] text-2xl font-black text-white backdrop-blur-sm">
               {initials}

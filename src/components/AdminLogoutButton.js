@@ -22,7 +22,7 @@ export default function AdminLogoutButton() {
       disabled={isPending}
       className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
     >
-      {isPending ? "Cerrando..." : "Cerrar sesion"}
+      {isPending ? "Cerrando..." : "Cerrar sesión"}
     </button>
   );
 }

@@ -13,7 +13,7 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
     setErrorMessage("");
 
     if (!username.trim() || !password.trim()) {
-      setErrorMessage("Ingresa usuario y contrasena.");
+      setErrorMessage("Ingresa usuario y contraseña.");
       return;
     }
 
@@ -34,12 +34,12 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
         const payload = await response.json();
 
         if (!response.ok || !payload.success) {
-          throw new Error(payload.message || "No se pudo iniciar sesion.");
+          throw new Error(payload.message || "No se pudo iniciar sesión.");
         }
 
         window.location.href = payload.redirectTo || nextPath;
       } catch (error) {
-        setErrorMessage(error.message || "No se pudo iniciar sesion.");
+        setErrorMessage(error.message || "No se pudo iniciar sesión.");
       }
     });
   }
@@ -51,7 +51,7 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
       </p>
       <h1 className="mt-4 font-serif text-4xl font-bold text-slate-950">Ingreso al dashboard</h1>
       <p className="mt-3 text-sm leading-7 text-slate-600">
-        Usa credenciales administrativas para consultar los resultados de la votacion.
+        Usa credenciales administrativas para consultar los resultados de la votación.
       </p>
 
       {!authConfigured ? (
@@ -94,7 +94,10 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
         </div>
 
         {errorMessage ? (
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+          <div
+            role="alert"
+            className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900"
+          >
             {errorMessage}
           </div>
         ) : null}

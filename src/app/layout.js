@@ -2,8 +2,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata = {
-  title: "Sistema de Votacion Escolar",
-  description: "Aplicacion web simple para elecciones escolares con Next.js y Supabase.",
+  title: "Elecciones | Brüning School",
+  description: "Plataforma oficial de votación para las elecciones del colegio Brüning School.",
 };
 
 export default function RootLayout({ children }) {
@@ -15,10 +15,10 @@ export default function RootLayout({ children }) {
             <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky-800">
-                  Sistema Escolar
+                  Colegio Brüning School
                 </p>
                 <Link href="/" className="text-xl font-bold text-slate-900">
-                  Votacion de Comites
+                  Elecciones escolares
                 </Link>
               </div>
 
@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
                   href="/admin/login"
                   className="rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950"
                 >
-                  Dashboard
+                  Resultados (Admin)
                 </Link>
               </nav>
             </div>

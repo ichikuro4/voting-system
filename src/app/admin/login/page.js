@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Login Admin | Sistema de Votacion Escolar",
+  title: "Acceso Admin | Brüning School",
 };
 
 export default async function AdminLoginPage({ searchParams }) {

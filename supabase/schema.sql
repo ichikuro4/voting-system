@@ -18,7 +18,7 @@ create table committees (
 
 create table election_settings (
   id uuid primary key default gen_random_uuid(),
-  process_name text not null default 'Proceso electoral escolar',
+  process_name text not null default 'Elecciones del colegio Brüning School',
   is_open boolean not null default true,
   created_at timestamptz not null default timezone('utc', now())
 );
@@ -46,7 +46,7 @@ values
   ('Comite Union Escolar', 'Participacion estudiantil y convivencia.', '#f59e0b', true);
 
 insert into election_settings (process_name, is_open)
-values ('Elecciones del Comite Escolar 2026', true);
+values ('Elecciones del colegio Brüning School', true);
 
 insert into votes (committee_id, vote_blank)
 select id, false

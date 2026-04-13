@@ -15,7 +15,7 @@ export default function ResultsChart({ data }) {
   if (!data.length) {
     return (
       <div className="flex h-full items-center justify-center rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-500">
-        Aun no hay datos para mostrar en la grafica.
+        Aún no hay datos para mostrar en la gráfica.
       </div>
     );
   }

@@ -25,7 +25,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Credenciales invalidas.",
+          message: "Credenciales inválidas.",
         },
         { status: 401 }
       );
@@ -51,7 +51,7 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: false,
-        message: error.message || "No se pudo iniciar sesion.",
+        message: error.message || "No se pudo iniciar sesión.",
       },
       { status: 400 }
     );

@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 
 const defaultSettings = {
-  process_name: "Proceso electoral escolar",
+  process_name: "Elecciones del colegio Brüning School",
   is_open: true,
 };
 
@@ -15,7 +15,7 @@ export async function getElectionSettings() {
     .maybeSingle();
 
   if (error) {
-    throw new Error("No se pudo cargar la configuracion de la eleccion.");
+    throw new Error("No se pudo cargar la configuración de la elección.");
   }
 
   if (!data) {

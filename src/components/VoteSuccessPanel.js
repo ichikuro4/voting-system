@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const REDIRECT_SECONDS = 10;
+const REDIRECT_SECONDS = 6;
 
 export default function VoteSuccessPanel() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function VoteSuccessPanel() {
     }, 1000);
 
     const redirectTimeout = window.setTimeout(() => {
-      router.replace("/");
+      router.replace("/votar");
     }, REDIRECT_SECONDS * 1000);
 
     return () => {
@@ -39,38 +39,33 @@ export default function VoteSuccessPanel() {
       </div>
 
       <p className="mt-6 text-sm font-semibold uppercase tracking-[0.28em] text-emerald-700">
-        Voto emitido
+        Voto registrado
       </p>
       <h1 className="mt-4 font-serif text-4xl font-bold text-slate-950">
-        Su voto fue registrado correctamente
+        Tu voto se registró correctamente
       </h1>
       <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-slate-700">
-        Gracias por participar en este proceso electoral escolar. El registro ya fue almacenado y el
-        sistema se preparara automaticamente para continuar con el siguiente alumno de forma ordenada y
-        supervisada.
+        La pantalla se preparará automáticamente para el siguiente alumno.
       </p>
 
       <div className="mt-8 rounded-[1.5rem] bg-slate-50 px-6 py-5">
         <p className="text-sm font-semibold text-slate-900">
-          Regresando a la pagina de inicio en {secondsLeft} segundo{secondsLeft === 1 ? "" : "s"}.
-        </p>
-        <p className="mt-2 text-sm text-slate-600">
-          Si deseas continuar antes, puedes volver ahora mismo desde el boton inferior.
+          Regresando a votación en {secondsLeft} segundo{secondsLeft === 1 ? "" : "s"}.
         </p>
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link
-          href="/"
+          href="/votar"
           className="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
         >
-          Ir al inicio ahora
+          Siguiente voto
         </Link>
         <Link
-          href="/votar"
+          href="/"
           className="rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50"
         >
-          Volver a votar
+          Ir al inicio
         </Link>
       </div>
     </section>

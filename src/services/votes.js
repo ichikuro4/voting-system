@@ -13,24 +13,24 @@ export async function registerVote({ committeeId = null, voteBlank = false }) {
   const normalizedCommitteeId = committeeId || null;
 
   if (!normalizedVoteBlank && !normalizedCommitteeId) {
-    throw new Error("Debes seleccionar un comite o marcar voto en blanco.");
+    throw new Error("Debes seleccionar un comité o marcar voto en blanco.");
   }
 
   if (normalizedVoteBlank && normalizedCommitteeId) {
-    throw new Error("El voto en blanco no debe incluir un comite.");
+    throw new Error("El voto en blanco no debe incluir un comité.");
   }
 
   const settings = await getElectionSettings();
 
   if (!settings.is_open) {
-    throw new Error("La votacion se encuentra cerrada.");
+    throw new Error("La votación se encuentra cerrada.");
   }
 
   if (!normalizedVoteBlank) {
     const committee = await getActiveCommitteeById(normalizedCommitteeId);
 
     if (!committee) {
-      throw new Error("El comite seleccionado no esta disponible.");
+      throw new Error("El comité seleccionado no está disponible.");
     }
   }
 
