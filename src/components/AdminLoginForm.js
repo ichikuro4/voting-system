@@ -49,8 +49,10 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
       <p className="text-sm font-semibold uppercase tracking-[0.28em] text-sky-800">
         Acceso administrativo
       </p>
-      <h1 className="mt-4 font-serif text-4xl font-bold text-slate-950">Ingreso al dashboard</h1>
-      <p className="mt-3 text-sm leading-7 text-slate-600">
+      <h1 className="mt-4 font-serif text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+        Ingreso al dashboard
+      </h1>
+      <p className="mt-3 text-base leading-7 text-slate-600">
         Usa credenciales administrativas para consultar los resultados de la votación.
       </p>
 
@@ -70,7 +72,7 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
             type="text"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500"
+            className="input-base"
             placeholder="username"
             autoComplete="username"
             disabled={isPending || !authConfigured}
@@ -86,7 +88,7 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500"
+            className="input-base"
             placeholder="********"
             autoComplete="current-password"
             disabled={isPending || !authConfigured}
@@ -105,7 +107,7 @@ export default function AdminLoginForm({ nextPath = "/dashboard", authConfigured
         <button
           type="submit"
           disabled={isPending || !authConfigured}
-          className="w-full rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+          className="btn-base btn-dark w-full"
         >
           {isPending ? "Ingresando..." : "Ingresar"}
         </button>

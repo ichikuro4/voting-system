@@ -69,17 +69,17 @@ export default function ResetVotesButton() {
   }
 
   return (
-    <div className="h-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+    <div className="action-card">
       <button
         type="button"
         onClick={handleReset}
         disabled={isPending}
-        className="w-full rounded-full bg-rose-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-800 disabled:cursor-not-allowed disabled:bg-rose-400"
+        className="btn-base btn-danger w-full"
       >
         {isPending ? "Reiniciando..." : "Reiniciar votación"}
       </button>
       <p
-        className={`mt-2 min-h-10 text-xs leading-5 ${
+        className={`helper-text ${
           feedbackMessage
             ? feedbackType === "error"
               ? "text-rose-700"

@@ -62,13 +62,13 @@ export default function ExportVotesButton() {
   }
 
   return (
-    <div className="h-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+    <div className="action-card">
       <div className="flex gap-2">
         <button
           type="button"
           onClick={() => handleExport("csv")}
           disabled={isPending}
-          className="w-full rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+          className="btn-base btn-dark w-full px-4"
         >
           {isPending ? "Exportando..." : "Exportar CSV"}
         </button>
@@ -76,13 +76,13 @@ export default function ExportVotesButton() {
           type="button"
           onClick={() => handleExport("json")}
           disabled={isPending}
-          className="w-full rounded-full border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
+          className="btn-base btn-secondary w-full px-4"
         >
           JSON
         </button>
       </div>
       <p
-        className={`mt-2 min-h-10 text-xs leading-5 ${
+        className={`helper-text ${
           feedbackMessage
             ? feedbackType === "error"
               ? "text-rose-700"

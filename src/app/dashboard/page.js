@@ -27,6 +27,16 @@ function buildLeaderLabel(leaders) {
   return `Empate entre ${leaders.map((leader) => leader.name).join(", ")}`;
 }
 
+function getProgressWidth(percentage) {
+  const numericPercentage = Number(percentage);
+
+  if (Number.isNaN(numericPercentage)) {
+    return "0%";
+  }
+
+  return `${Math.min(100, Math.max(0, numericPercentage))}%`;
+}
+
 export default async function DashboardPage() {
   await requireAdminSession();
 
@@ -61,18 +71,33 @@ export default async function DashboardPage() {
               Consulta el total de votos, el estado de la jornada y la distribución por comité.
             </p>
           </div>
-          <div
-            className={`w-fit rounded-2xl px-5 py-4 text-sm font-semibold ${
-              settings.is_open
-                ? "bg-emerald-50 text-emerald-900"
-                : "bg-slate-100 text-slate-800"
-            }`}
-          >
-            {settings.is_open ? "Votación abierta" : "Votación cerrada"}
+
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm">
+              {settings.process_name || "Elecciones del colegio Brüning School"}
+            </span>
+            <span
+              className={`rounded-full px-4 py-2 text-sm font-semibold ${
+                settings.is_open ? "bg-emerald-50 text-emerald-900" : "bg-slate-100 text-slate-800"
+              }`}
+            >
+              {settings.is_open ? "Votación abierta" : "Votación cerrada"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="panel-strong rounded-[1.75rem] p-6">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-slate-950">Acciones administrativas</h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Gestiona el estado de la jornada y descarga respaldos sin salir de esta vista.
+            </p>
           </div>
         </div>
 
-        <div className="grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-5 grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
           <ElectionStatusToggleButton isOpen={settings.is_open} />
           <ResetVotesButton />
           <ExportVotesButton />
@@ -80,7 +105,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         <StatsCard
           title="Total de votos"
           value={results.totalVotes}
@@ -142,6 +167,16 @@ export default async function DashboardPage() {
                   </div>
                   <p className="text-sm font-bold text-slate-900">{committee.votes} votos</p>
                 </div>
+
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      backgroundColor: committee.color,
+                      width: getProgressWidth(committee.percentage),
+                    }}
+                  />
+                </div>
                 <p className="mt-2 text-sm text-slate-600">{committee.percentage}% del total</p>
               </div>
             ))}
@@ -150,6 +185,12 @@ export default async function DashboardPage() {
               <div className="flex items-center justify-between gap-3">
                 <p className="font-semibold text-slate-900">Voto en blanco</p>
                 <p className="text-sm font-bold text-slate-900">{results.blankVotes} votos</p>
+              </div>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
+                <div
+                  className="h-full rounded-full bg-slate-500"
+                  style={{ width: getProgressWidth(results.blankPercentage) }}
+                />
               </div>
               <p className="mt-2 text-sm text-slate-600">{results.blankPercentage}% del total</p>
             </div>

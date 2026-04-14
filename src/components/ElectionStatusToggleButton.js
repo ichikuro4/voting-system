@@ -45,12 +45,12 @@ export default function ElectionStatusToggleButton({ isOpen }) {
   }
 
   return (
-    <div className="h-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+    <div className="action-card">
       <button
         type="button"
         onClick={handleToggle}
         disabled={isPending}
-        className={`w-full rounded-full px-5 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-70 ${
+        className={`btn-base w-full ${
           isOpen
             ? "bg-rose-600 text-white hover:bg-rose-700"
             : "bg-emerald-600 text-white hover:bg-emerald-700"
@@ -59,9 +59,7 @@ export default function ElectionStatusToggleButton({ isOpen }) {
         {isPending ? "Actualizando..." : isOpen ? "Cerrar votación" : "Abrir votación"}
       </button>
       <p
-        className={`mt-2 min-h-10 text-xs leading-5 ${
-          errorMessage ? "text-rose-700" : "text-slate-500"
-        }`}
+        className={`helper-text ${errorMessage ? "text-rose-700" : "text-slate-500"}`}
       >
         {helperMessage}
       </p>

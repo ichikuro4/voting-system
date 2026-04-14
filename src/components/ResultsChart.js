@@ -11,6 +11,26 @@ import {
   YAxis,
 } from "recharts";
 
+function ChartTooltip({ active, payload }) {
+  if (!active || !payload?.length) {
+    return null;
+  }
+
+  const item = payload[0]?.payload;
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-[0_18px_35px_rgba(15,23,42,0.12)]">
+      <p className="text-sm font-semibold text-slate-900">{item.name}</p>
+      <p className="mt-1 text-sm text-slate-700">
+        <span className="font-bold text-slate-900">{item.votes}</span> votos
+      </p>
+      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+        {item.percentage}% del total
+      </p>
+    </div>
+  );
+}
+
 export default function ResultsChart({ data }) {
   if (!data.length) {
     return (
@@ -22,7 +42,7 @@ export default function ResultsChart({ data }) {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data} barCategoryGap={24}>
+      <BarChart data={data} barCategoryGap={20} margin={{ top: 8, right: 12, left: -6, bottom: 12 }}>
         <CartesianGrid strokeDasharray="4 4" stroke="#d8e0ea" vertical={false} />
         <XAxis
           dataKey="name"
@@ -30,24 +50,25 @@ export default function ResultsChart({ data }) {
           tickLine={false}
           axisLine={false}
           interval={0}
-          angle={-10}
+          angle={-8}
           textAnchor="end"
-          height={64}
+          tick={{ fontSize: 12, fontWeight: 600 }}
+          tickMargin={10}
+          height={66}
         />
-        <YAxis allowDecimals={false} stroke="#607084" tickLine={false} axisLine={false} />
+        <YAxis
+          allowDecimals={false}
+          stroke="#607084"
+          tickLine={false}
+          axisLine={false}
+          tick={{ fontSize: 12 }}
+          width={34}
+        />
         <Tooltip
           cursor={{ fill: "rgba(148, 163, 184, 0.12)" }}
-          contentStyle={{
-            borderRadius: "16px",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 20px 40px rgba(15, 23, 42, 0.12)",
-          }}
-          formatter={(value, _name, item) => [
-            `${value} votos (${item.payload.percentage}%)`,
-            item.payload.name,
-          ]}
+          content={<ChartTooltip />}
         />
-        <Bar dataKey="votes" radius={[14, 14, 0, 0]}>
+        <Bar dataKey="votes" radius={[12, 12, 0, 0]} maxBarSize={56}>
           {data.map((entry) => (
             <Cell key={entry.name} fill={entry.color} />
           ))}
