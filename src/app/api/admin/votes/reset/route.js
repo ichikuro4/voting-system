@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { hasAdminSession } from "@/lib/admin-auth";
+import { registerAdminAudit } from "@/services/admin-audit";
 import { resetAllVotes } from "@/services/votes";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +38,13 @@ export async function POST(request) {
     }
 
     const result = await resetAllVotes();
+    await registerAdminAudit({
+      request,
+      action: "votes_reset",
+      details: {
+        deleted_votes: result.deletedVotes,
+      },
+    });
 
     revalidatePath("/dashboard");
 

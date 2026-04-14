@@ -6,6 +6,7 @@ create extension if not exists "pgcrypto";
 drop table if exists votes cascade;
 drop table if exists election_settings cascade;
 drop table if exists committees cascade;
+drop table if exists admin_audit_logs cascade;
 
 create table committees (
   id uuid primary key default gen_random_uuid(),
@@ -35,9 +36,21 @@ create table votes (
   )
 );
 
+create table admin_audit_logs (
+  id uuid primary key default gen_random_uuid(),
+  admin_username text not null,
+  action text not null,
+  details jsonb not null default '{}'::jsonb,
+  ip_address text,
+  user_agent text,
+  created_at timestamptz not null default timezone('utc', now())
+);
+
 create index votes_committee_id_idx on votes(committee_id);
 create index votes_created_at_idx on votes(created_at desc);
 create index committees_active_idx on committees(active);
+create index admin_audit_logs_created_at_idx on admin_audit_logs(created_at desc);
+create index admin_audit_logs_action_idx on admin_audit_logs(action);
 
 insert into committees (name, short_description, color, active)
 values
@@ -78,6 +91,7 @@ values (null, true);
 alter table committees enable row level security;
 alter table election_settings enable row level security;
 alter table votes enable row level security;
+alter table admin_audit_logs enable row level security;
 
 create policy "Public can read committees"
 on committees
@@ -106,3 +120,4 @@ using (true);
 comment on table committees is 'Catalogo de comites para la votacion escolar.';
 comment on table votes is 'Registro de votos emitidos.';
 comment on table election_settings is 'Configuracion general del proceso electoral.';
+comment on table admin_audit_logs is 'Bitacora de acciones administrativas del sistema.';

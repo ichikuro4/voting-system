@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { hasAdminSession } from "@/lib/admin-auth";
+import { registerAdminAudit } from "@/services/admin-audit";
 import { setElectionOpenState } from "@/services/election";
 
 export const dynamic = "force-dynamic";
@@ -32,6 +33,13 @@ export async function POST(request) {
     }
 
     const settings = await setElectionOpenState(body.isOpen);
+    await registerAdminAudit({
+      request,
+      action: "election_status_updated",
+      details: {
+        is_open: settings.is_open,
+      },
+    });
 
     revalidatePath("/dashboard");
     revalidatePath("/votar");

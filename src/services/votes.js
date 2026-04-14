@@ -166,3 +166,27 @@ export async function resetAllVotes() {
     deletedVotes: count ?? 0,
   };
 }
+
+export async function getVotesForExport() {
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from("votes")
+    .select("id, committee_id, vote_blank, created_at, committees(name)")
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    throw new Error("No se pudieron obtener los votos para exportar.");
+  }
+
+  return (data ?? []).map((vote) => {
+    const committee = Array.isArray(vote.committees) ? vote.committees[0] : vote.committees;
+
+    return {
+      id: vote.id,
+      created_at: vote.created_at,
+      vote_blank: vote.vote_blank,
+      committee_id: vote.committee_id,
+      committee_name: committee?.name || "",
+    };
+  });
+}

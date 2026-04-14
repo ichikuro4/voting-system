@@ -1,5 +1,6 @@
 import AdminLogoutButton from "@/components/AdminLogoutButton";
 import ElectionStatusToggleButton from "@/components/ElectionStatusToggleButton";
+import ExportVotesButton from "@/components/ExportVotesButton";
 import ResetVotesButton from "@/components/ResetVotesButton";
 import ResultsChartClient from "@/components/ResultsChartClient";
 import StatsCard from "@/components/StatsCard";
@@ -49,8 +50,8 @@ export default async function DashboardPage() {
 
   return (
     <section className="space-y-6">
-      <div className="panel rounded-[2rem] p-8 sm:p-10">
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
+      <div className="panel space-y-6 rounded-[2rem] p-8 sm:p-10">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-sky-800">
               Elecciones del colegio Brüning School
@@ -60,26 +61,22 @@ export default async function DashboardPage() {
               Consulta el total de votos, el estado de la jornada y la distribución por comité.
             </p>
           </div>
-
-          <div className="w-full space-y-4 xl:max-w-[35rem]">
-            <div className="flex xl:justify-end">
-              <div
-                className={`rounded-2xl px-5 py-4 text-sm font-semibold ${
-                  settings.is_open
-                    ? "bg-emerald-50 text-emerald-900"
-                    : "bg-slate-100 text-slate-800"
-                }`}
-              >
-                {settings.is_open ? "Votación abierta" : "Votación cerrada"}
-              </div>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              <ElectionStatusToggleButton isOpen={settings.is_open} />
-              <ResetVotesButton />
-              <AdminLogoutButton />
-            </div>
+          <div
+            className={`w-fit rounded-2xl px-5 py-4 text-sm font-semibold ${
+              settings.is_open
+                ? "bg-emerald-50 text-emerald-900"
+                : "bg-slate-100 text-slate-800"
+            }`}
+          >
+            {settings.is_open ? "Votación abierta" : "Votación cerrada"}
           </div>
+        </div>
+
+        <div className="grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <ElectionStatusToggleButton isOpen={settings.is_open} />
+          <ResetVotesButton />
+          <ExportVotesButton />
+          <AdminLogoutButton />
         </div>
       </div>
 

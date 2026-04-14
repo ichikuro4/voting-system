@@ -69,7 +69,7 @@ export default function ResetVotesButton() {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+    <div className="h-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
       <button
         type="button"
         onClick={handleReset}

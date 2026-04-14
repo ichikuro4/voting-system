@@ -16,6 +16,9 @@ La app permite:
 - reiniciar la pantalla para el siguiente alumno
 - ver resultados en un dashboard con porcentajes y grafica
 - proteger el dashboard con credenciales administrativas
+- abrir/cerrar votacion desde el dashboard admin
+- exportar votos en CSV o JSON
+- registrar auditoria de acciones administrativas
 
 ## Estructura
 
@@ -25,6 +28,9 @@ src/
     admin/login/page.js
     api/admin/login/route.js
     api/admin/logout/route.js
+    api/admin/election/status/route.js
+    api/admin/votes/export/route.js
+    api/admin/votes/reset/route.js
     api/votes/route.js
     dashboard/page.js
     votar/exito/page.js
@@ -35,6 +41,9 @@ src/
   components/
     AdminLoginForm.js
     AdminLogoutButton.js
+    ElectionStatusToggleButton.js
+    ResetVotesButton.js
+    ExportVotesButton.js
     ResultsChart.js
     StatsCard.js
     VoteCard.js
@@ -46,6 +55,7 @@ src/
   services/
     committees.js
     election.js
+    admin-audit.js
     votes.js
 supabase/
   schema.sql
@@ -95,6 +105,7 @@ npm run dev
 6. Pulsa `Reiniciar pantalla` para dejar la vista lista para el siguiente alumno.
 7. Entra a `/dashboard` para ver los resultados actualizados.
 8. Para acceder al panel, entra por `/admin/login` y usa las credenciales de `.env.local`.
+9. Desde `/dashboard` puedes abrir/cerrar, exportar o reiniciar la votacion.
 
 ## Decisiones de arquitectura
 
@@ -114,3 +125,27 @@ El SQL incluido crea politicas RLS abiertas para `anon` porque el sistema, por a
 - leer votos para el dashboard
 
 Cuando agregues autenticacion admin, lo correcto es restringir la lectura de votos y la administracion del proceso a usuarios autenticados con permisos administrativos.
+
+## Activar auditoria en instalaciones existentes
+
+Si ya tenias la base creada antes de agregar auditoria, ejecuta este SQL en Supabase:
+
+```sql
+create table if not exists admin_audit_logs (
+  id uuid primary key default gen_random_uuid(),
+  admin_username text not null,
+  action text not null,
+  details jsonb not null default '{}'::jsonb,
+  ip_address text,
+  user_agent text,
+  created_at timestamptz not null default timezone('utc', now())
+);
+
+create index if not exists admin_audit_logs_created_at_idx
+on admin_audit_logs(created_at desc);
+
+create index if not exists admin_audit_logs_action_idx
+on admin_audit_logs(action);
+
+alter table admin_audit_logs enable row level security;
+```
