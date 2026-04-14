@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 import { getAllCommittees, getActiveCommitteeById } from "@/services/committees";
 import { getElectionSettings } from "@/services/election";
 
@@ -140,5 +140,29 @@ export async function getVotingResults() {
         color: "#94a3b8",
       },
     ],
+  };
+}
+
+export async function resetAllVotes() {
+  const supabase = createSupabaseAdminClient();
+  const { count, error: countError } = await supabase
+    .from("votes")
+    .select("*", { count: "exact", head: true });
+
+  if (countError) {
+    throw new Error("No se pudo contar los votos antes de reiniciar.");
+  }
+
+  const { error: deleteError } = await supabase
+    .from("votes")
+    .delete()
+    .not("id", "is", null);
+
+  if (deleteError) {
+    throw new Error("No se pudo reiniciar la votación.");
+  }
+
+  return {
+    deletedVotes: count ?? 0,
   };
 }

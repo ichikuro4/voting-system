@@ -69,10 +69,13 @@ npm install
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_clave_anon_publica
+SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_solo_servidor
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=tu_clave_segura
 ADMIN_SESSION_SECRET=otra_clave_larga_y_distinta
 ```
+
+`SUPABASE_SERVICE_ROLE_KEY` se usa solo en rutas administrativas del servidor (por ejemplo, abrir/cerrar votacion).
 
 5. Inicia el servidor local.
 

@@ -1,4 +1,6 @@
 import AdminLogoutButton from "@/components/AdminLogoutButton";
+import ElectionStatusToggleButton from "@/components/ElectionStatusToggleButton";
+import ResetVotesButton from "@/components/ResetVotesButton";
 import ResultsChartClient from "@/components/ResultsChartClient";
 import StatsCard from "@/components/StatsCard";
 import { requireAdminSession } from "@/lib/admin-auth";
@@ -48,7 +50,7 @@ export default async function DashboardPage() {
   return (
     <section className="space-y-6">
       <div className="panel rounded-[2rem] p-8 sm:p-10">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-sky-800">
               Elecciones del colegio Brüning School
@@ -59,17 +61,24 @@ export default async function DashboardPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div
-              className={`rounded-2xl px-5 py-4 text-sm font-semibold ${
-                settings.is_open
-                  ? "bg-emerald-50 text-emerald-900"
-                  : "bg-slate-100 text-slate-800"
-              }`}
-            >
-              {settings.is_open ? "Votación abierta" : "Votación cerrada"}
+          <div className="w-full space-y-4 xl:max-w-[35rem]">
+            <div className="flex xl:justify-end">
+              <div
+                className={`rounded-2xl px-5 py-4 text-sm font-semibold ${
+                  settings.is_open
+                    ? "bg-emerald-50 text-emerald-900"
+                    : "bg-slate-100 text-slate-800"
+                }`}
+              >
+                {settings.is_open ? "Votación abierta" : "Votación cerrada"}
+              </div>
             </div>
-            <AdminLogoutButton />
+
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <ElectionStatusToggleButton isOpen={settings.is_open} />
+              <ResetVotesButton />
+              <AdminLogoutButton />
+            </div>
           </div>
         </div>
       </div>
