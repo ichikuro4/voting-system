@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const REFRESH_INTERVAL_MS = 15000;
+const REFRESH_INTERVAL_MS = 5000;
 
 export default function FlashAutoRefresh() {
   const router = useRouter();
@@ -18,9 +18,5 @@ export default function FlashAutoRefresh() {
     };
   }, [router]);
 
-  return (
-    <p className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-      Actualización automática cada 15 segundos
-    </p>
-  );
+  return null;
 }

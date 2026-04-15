@@ -63,6 +63,7 @@ src/
 supabase/
   migrate_dni_access.sql
   migrate_two_committees.sql
+  seed_500_random_votes.sql
   schema.sql
 .env.local.example
 ```
@@ -186,3 +187,14 @@ Si ya tienes una base en uso y quieres quedarte solo con dos listas:
 Listas configuradas:
 - `Lista N° 1 - Maria Luisa Oliva Vásquez` (sigla `LD`, foto `public/Candidata 1.webp`)
 - `Lista N° 2 - Sol De María Anticona Gutiérrez` (sigla `ELUN`, foto `public/Candidata 2.webp`)
+
+## Cargar 500 datos aleatorios
+
+Para pruebas visuales (dashboard/flash), ejecuta en Supabase:
+
+```sql
+-- Archivo incluido en el proyecto:
+-- supabase/seed_500_random_votes.sql
+```
+
+Ese script inserta 500 registros nuevos en `voter_access` y `votes` con distribución aleatoria.
