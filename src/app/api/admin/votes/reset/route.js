@@ -43,6 +43,7 @@ export async function POST(request) {
       action: "votes_reset",
       details: {
         deleted_votes: result.deletedVotes,
+        deleted_dni_records: result.deletedDniRecords,
       },
     });
 
@@ -52,6 +53,7 @@ export async function POST(request) {
       success: true,
       message: "La votación fue reiniciada correctamente.",
       deletedVotes: result.deletedVotes,
+      deletedDniRecords: result.deletedDniRecords,
     });
   } catch (error) {
     const message = error.message || "No se pudo reiniciar la votación.";

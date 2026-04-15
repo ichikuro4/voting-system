@@ -10,6 +10,7 @@ Aplicacion web de votacion escolar construida con:
 
 La app permite:
 
+- registrar acceso por documento (DNI o carnet de extranjeria) antes de votar
 - votar por un comite activo
 - registrar voto en blanco
 - confirmar antes de guardar
@@ -31,6 +32,7 @@ src/
     api/admin/election/status/route.js
     api/admin/votes/export/route.js
     api/admin/votes/reset/route.js
+    api/voter-access/route.js
     api/votes/route.js
     dashboard/page.js
     votar/exito/page.js
@@ -56,8 +58,10 @@ src/
     committees.js
     election.js
     admin-audit.js
+    voter-access.js
     votes.js
 supabase/
+  migrate_dni_access.sql
   schema.sql
 .env.local.example
 ```
@@ -97,21 +101,24 @@ npm run dev
 
 ## Como probar
 
-1. Entra a `/votar`.
-2. Selecciona un comite o `Voto en blanco`.
-3. Pulsa `Confirmar voto`.
-4. Acepta la confirmacion.
-5. Verifica el mensaje de exito.
-6. Pulsa `Reiniciar pantalla` para dejar la vista lista para el siguiente alumno.
-7. Entra a `/dashboard` para ver los resultados actualizados.
-8. Para acceder al panel, entra por `/admin/login` y usa las credenciales de `.env.local`.
-9. Desde `/dashboard` puedes abrir/cerrar, exportar o reiniciar la votacion.
+1. Entra a `/`.
+2. Ingresa un documento valido: DNI (8 digitos) o carnet de extranjeria (9 digitos), y pulsa `Aceptar y votar`.
+3. Selecciona un comite o `Voto en blanco`.
+4. Pulsa `Confirmar voto`.
+5. Acepta la confirmacion.
+6. Verifica el mensaje de exito.
+7. Regresa al inicio para habilitar al siguiente alumno con otro documento.
+8. Entra a `/dashboard` para ver los resultados actualizados.
+9. Para acceder al panel, entra por `/admin/login` y usa las credenciales de `.env.local`.
+10. Desde `/dashboard` puedes abrir/cerrar, exportar o reiniciar la votacion.
 
 ## Decisiones de arquitectura
 
 - La insercion de votos se hace en `POST /api/votes`.
+- La habilitacion por documento se hace en `POST /api/voter-access`.
 - Las consultas del dashboard se concentran en `src/services/votes.js`.
 - La configuracion de eleccion se separa en `election_settings` para poder abrir o cerrar la votacion.
+- El control de duplicidad se resuelve con `voter_access` y la columna unica `votes.student_dni` (documento del alumno).
 - El dashboard usa credenciales simples por cookie `httpOnly`, sin depender aun de Supabase Auth.
 - Si luego quieres escalar, puedes migrar esta capa a Supabase Auth sin reestructurar la app.
 
@@ -121,6 +128,7 @@ El SQL incluido crea politicas RLS abiertas para `anon` porque el sistema, por a
 
 - leer comites activos
 - leer configuracion del proceso
+- registrar/consultar accesos por documento
 - insertar votos
 - leer votos para el dashboard
 
@@ -149,3 +157,18 @@ on admin_audit_logs(action);
 
 alter table admin_audit_logs enable row level security;
 ```
+
+## Migrar instalaciones existentes al flujo por documento
+
+Si ya tienes la base creada y no quieres perder datos, ejecuta:
+
+```sql
+-- Archivo incluido en el proyecto:
+-- supabase/migrate_dni_access.sql
+```
+
+Ese script:
+- crea `voter_access`
+- agrega `votes.student_dni`
+- rellena documentos sintéticos para votos antiguos (solo para mantener compatibilidad)
+- activa restricciones y políticas necesarias para bloquear duplicidad de voto por documento

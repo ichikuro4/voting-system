@@ -24,13 +24,21 @@ function escapeCsvValue(value) {
 }
 
 function buildCsvContent(rows) {
-  const headers = ["id", "created_at", "vote_blank", "committee_id", "committee_name"];
+  const headers = [
+    "id",
+    "student_dni",
+    "created_at",
+    "vote_blank",
+    "committee_id",
+    "committee_name",
+  ];
   const lines = [headers.join(",")];
 
   rows.forEach((row) => {
     lines.push(
       [
         escapeCsvValue(row.id),
+        escapeCsvValue(row.student_dni),
         escapeCsvValue(row.created_at),
         escapeCsvValue(row.vote_blank),
         escapeCsvValue(row.committee_id),

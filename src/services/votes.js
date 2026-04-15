@@ -1,6 +1,7 @@
 import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 import { getAllCommittees, getActiveCommitteeById } from "@/services/committees";
 import { getElectionSettings } from "@/services/election";
+import { assertVoterCanVote, markVoterAsVoted } from "@/services/voter-access";
 
 const fallbackColors = ["#0f766e", "#0284c7", "#f59e0b", "#dc2626", "#7c3aed", "#16a34a"];
 
@@ -8,9 +9,10 @@ function roundPercentage(value) {
   return Number(value.toFixed(1));
 }
 
-export async function registerVote({ committeeId = null, voteBlank = false }) {
+export async function registerVote({ dni, committeeId = null, voteBlank = false }) {
   const normalizedVoteBlank = Boolean(voteBlank);
   const normalizedCommitteeId = committeeId || null;
+  const normalizedDni = await assertVoterCanVote(dni);
 
   if (!normalizedVoteBlank && !normalizedCommitteeId) {
     throw new Error("Debes seleccionar un comité o marcar voto en blanco.");
@@ -38,15 +40,22 @@ export async function registerVote({ committeeId = null, voteBlank = false }) {
   const { data, error } = await supabase
     .from("votes")
     .insert({
+      student_dni: normalizedDni,
       committee_id: normalizedVoteBlank ? null : normalizedCommitteeId,
       vote_blank: normalizedVoteBlank,
     })
-    .select("id, committee_id, vote_blank, created_at")
+    .select("id, student_dni, committee_id, vote_blank, created_at")
     .single();
 
   if (error) {
+    if (error.code === "23505") {
+      throw new Error("Este documento ya votó.");
+    }
+
     throw new Error("No se pudo guardar el voto en la base de datos.");
   }
+
+  await markVoterAsVoted(normalizedDni);
 
   return data;
 }
@@ -145,25 +154,41 @@ export async function getVotingResults() {
 
 export async function resetAllVotes() {
   const supabase = createSupabaseAdminClient();
-  const { count, error: countError } = await supabase
-    .from("votes")
-    .select("*", { count: "exact", head: true });
+  const [{ count: votesCount, error: votesCountError }, { count: voterCount, error: voterCountError }] =
+    await Promise.all([
+      supabase.from("votes").select("*", { count: "exact", head: true }),
+      supabase.from("voter_access").select("*", { count: "exact", head: true }),
+    ]);
 
-  if (countError) {
+  if (votesCountError) {
     throw new Error("No se pudo contar los votos antes de reiniciar.");
   }
 
-  const { error: deleteError } = await supabase
+  if (voterCountError) {
+    throw new Error("No se pudo contar los documentos antes de reiniciar.");
+  }
+
+  const { error: deleteVotesError } = await supabase
     .from("votes")
     .delete()
     .not("id", "is", null);
 
-  if (deleteError) {
+  if (deleteVotesError) {
     throw new Error("No se pudo reiniciar la votación.");
   }
 
+  const { error: deleteVoterAccessError } = await supabase
+    .from("voter_access")
+    .delete()
+    .not("dni", "is", null);
+
+  if (deleteVoterAccessError) {
+    throw new Error("No se pudo limpiar el registro de documentos.");
+  }
+
   return {
-    deletedVotes: count ?? 0,
+    deletedVotes: votesCount ?? 0,
+    deletedDniRecords: voterCount ?? 0,
   };
 }
 
@@ -171,7 +196,7 @@ export async function getVotesForExport() {
   const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase
     .from("votes")
-    .select("id, committee_id, vote_blank, created_at, committees(name)")
+    .select("id, student_dni, committee_id, vote_blank, created_at, committees(name)")
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -183,6 +208,7 @@ export async function getVotesForExport() {
 
     return {
       id: vote.id,
+      student_dni: vote.student_dni,
       created_at: vote.created_at,
       vote_blank: vote.vote_blank,
       committee_id: vote.committee_id,

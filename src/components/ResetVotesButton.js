@@ -60,7 +60,10 @@ export default function ResetVotesButton() {
           throw new Error(payload.message || "No se pudo reiniciar la votación.");
         }
 
-        setFeedback("success", `Votos eliminados: ${payload.deletedVotes}.`);
+        setFeedback(
+          "success",
+          `Votos eliminados: ${payload.deletedVotes}. Documentos limpiados: ${payload.deletedDniRecords ?? 0}.`
+        );
         router.refresh();
       } catch (error) {
         setFeedback("error", error.message || "No se pudo reiniciar la votación.");

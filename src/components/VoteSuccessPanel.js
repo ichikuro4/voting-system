@@ -23,7 +23,7 @@ export default function VoteSuccessPanel() {
     }, 1000);
 
     const redirectTimeout = window.setTimeout(() => {
-      router.replace("/votar");
+      router.replace("/");
     }, REDIRECT_SECONDS * 1000);
 
     return () => {
@@ -50,22 +50,16 @@ export default function VoteSuccessPanel() {
 
       <div className="mt-8 rounded-[1.5rem] bg-slate-50 px-6 py-5">
         <p className="text-sm font-semibold text-slate-900">
-          Regresando a votación en {secondsLeft} segundo{secondsLeft === 1 ? "" : "s"}.
+          Regresando a inicio en {secondsLeft} segundo{secondsLeft === 1 ? "" : "s"}.
         </p>
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link
-          href="/votar"
+          href="/"
           className="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
         >
-          Siguiente voto
-        </Link>
-        <Link
-          href="/"
-          className="rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50"
-        >
-          Ir al inicio
+          Siguiente alumno
         </Link>
       </div>
     </section>

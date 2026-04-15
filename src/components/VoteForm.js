@@ -32,7 +32,7 @@ function getInitials(label) {
     .join("");
 }
 
-export default function VoteForm({ committees, processName, votingOpen }) {
+export default function VoteForm({ committees, processName, votingOpen, voterDni }) {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -152,6 +152,7 @@ export default function VoteForm({ committees, processName, votingOpen }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            dni: voterDni,
             committeeId: selectedOption === blankOptionValue ? null : selectedOption,
             voteBlank: selectedOption === blankOptionValue,
           }),
@@ -206,16 +207,10 @@ export default function VoteForm({ committees, processName, votingOpen }) {
             </div>
             <div className="rounded-[1.5rem] border border-slate-200 bg-white px-4 py-4 text-sm text-slate-700">
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                Acción
+                Documento habilitado
               </p>
-              <p className="mt-2 text-base font-bold text-slate-950">
-                {selectedOption ? "Selección lista" : "Pendiente de elegir"}
-              </p>
-              <p className="mt-1">
-                {selectedOption
-                  ? "Puedes confirmar tu voto."
-                  : "Selecciona una tarjeta para continuar."}
-              </p>
+              <p className="mt-2 text-base font-bold text-slate-950">{voterDni}</p>
+              <p className="mt-1">Solo se admite un voto por documento.</p>
             </div>
           </div>
         </div>

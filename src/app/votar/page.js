@@ -2,6 +2,8 @@ import VoteForm from "@/components/VoteForm";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { getActiveCommittees } from "@/services/committees";
 import { getElectionSettings } from "@/services/election";
+import { normalizeDni } from "@/services/voter-access";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +11,7 @@ export const metadata = {
   title: "Votar | Brüning School",
 };
 
-export default async function VotePage() {
+export default async function VotePage({ searchParams }) {
   if (!isSupabaseConfigured()) {
       return (
         <section className="panel rounded-[2rem] p-8">
@@ -19,6 +21,28 @@ export default async function VotePage() {
           </p>
         </section>
       );
+  }
+  const resolvedSearchParams = await searchParams;
+  const voterDni = normalizeDni(resolvedSearchParams?.dni || "");
+
+  if (!/^\d{8,9}$/.test(voterDni)) {
+    return (
+      <section className="panel rounded-[2rem] p-8">
+        <h1 className="font-serif text-3xl font-bold text-slate-950">Pantalla de votación</h1>
+        <p className="mt-4 max-w-2xl text-slate-700">
+          Primero debes ingresar tu DNI o carnet de extranjería en la página de inicio para
+          habilitar tu voto.
+        </p>
+        <div className="mt-6">
+          <Link
+            href="/"
+            className="inline-flex rounded-full bg-teal-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-teal-800"
+          >
+            Volver a Inicio
+          </Link>
+        </div>
+      </section>
+    );
   }
 
   const [committees, settings] = await Promise.all([
@@ -99,6 +123,7 @@ export default async function VotePage() {
         committees={committees}
         processName={settings.process_name}
         votingOpen={settings.is_open}
+        voterDni={voterDni}
       />
     </section>
   );

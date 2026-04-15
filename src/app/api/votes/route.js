@@ -8,6 +8,7 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const vote = await registerVote({
+      dni: body.dni,
       committeeId: body.committeeId ?? null,
       voteBlank: Boolean(body.voteBlank),
     });
