@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 function getInitials(title, isBlank) {
   if (isBlank) {
     return "VB";
@@ -30,6 +32,8 @@ export default function VoteCard({
   selected,
   onChange,
   color,
+  imageSrc,
+  logoLabel,
   isBlank = false,
 }) {
   const initials = getInitials(title, isBlank);
@@ -62,12 +66,12 @@ export default function VoteCard({
         <div className="absolute -bottom-8 right-6 h-20 w-20 rounded-full border border-white/20 bg-white/10" />
 
         <div className="relative flex items-start justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/70">
-              {isBlank ? "Opción especial" : "Comité activo"}
+              {isBlank ? "Opción especial" : "Lista oficial"}
             </p>
-            <div className="mt-4 inline-flex h-[3.75rem] w-[3.75rem] items-center justify-center rounded-[1.1rem] border border-white/20 bg-white/[0.14] text-2xl font-black text-white backdrop-blur-sm">
-              {initials}
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.14] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+              <span>{isBlank ? "VB" : logoLabel || initials}</span>
             </div>
           </div>
 
@@ -84,6 +88,18 @@ export default function VoteCard({
             />
           </span>
         </div>
+
+        {!isBlank && imageSrc ? (
+          <div className="relative mt-4 overflow-hidden rounded-[1rem] border border-white/25 bg-slate-900/25">
+            <Image
+              src={imageSrc}
+              alt={`Fotografía de ${title}`}
+              width={640}
+              height={480}
+              className="h-[19rem] w-full object-contain object-center sm:h-[22rem]"
+            />
+          </div>
+        ) : null}
       </div>
 
       <div className="mt-4 space-y-3 px-1 pb-1">
@@ -101,13 +117,15 @@ export default function VoteCard({
                 </span>
               ) : null}
             </div>
-            <p
-              className={`mt-2 text-sm leading-6 ${
-                selected ? "text-slate-300" : "text-slate-600"
-              }`}
-            >
-              {description}
-            </p>
+            {description ? (
+              <p
+                className={`mt-2 text-sm leading-6 ${
+                  selected ? "text-slate-300" : "text-slate-600"
+                }`}
+              >
+                {description}
+              </p>
+            ) : null}
           </div>
 
           <span

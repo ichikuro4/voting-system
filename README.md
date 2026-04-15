@@ -11,7 +11,7 @@ Aplicacion web de votacion escolar construida con:
 La app permite:
 
 - registrar acceso por documento (DNI o carnet de extranjeria) antes de votar
-- votar por un comite activo
+- votar por una lista activa
 - registrar voto en blanco
 - confirmar antes de guardar
 - reiniciar la pantalla para el siguiente alumno
@@ -62,6 +62,7 @@ src/
     votes.js
 supabase/
   migrate_dni_access.sql
+  migrate_two_committees.sql
   schema.sql
 .env.local.example
 ```
@@ -103,7 +104,7 @@ npm run dev
 
 1. Entra a `/`.
 2. Ingresa un documento valido: DNI (8 digitos) o carnet de extranjeria (9 digitos), y pulsa `Aceptar y votar`.
-3. Selecciona un comite o `Voto en blanco`.
+3. Selecciona una lista o `Voto en blanco`.
 4. Pulsa `Confirmar voto`.
 5. Acepta la confirmacion.
 6. Verifica el mensaje de exito.
@@ -126,7 +127,7 @@ npm run dev
 
 El SQL incluido crea politicas RLS abiertas para `anon` porque el sistema, por ahora, no usa login. Eso hace posible:
 
-- leer comites activos
+- leer listas activas
 - leer configuracion del proceso
 - registrar/consultar accesos por documento
 - insertar votos
@@ -172,3 +173,16 @@ Ese script:
 - agrega `votes.student_dni`
 - rellena documentos sintéticos para votos antiguos (solo para mantener compatibilidad)
 - activa restricciones y políticas necesarias para bloquear duplicidad de voto por documento
+
+## Actualizar a 2 listas oficiales
+
+Si ya tienes una base en uso y quieres quedarte solo con dos listas:
+
+```sql
+-- Archivo incluido en el proyecto:
+-- supabase/migrate_two_committees.sql
+```
+
+Listas configuradas:
+- `Lista N° 1 - Maria Luisa Oliva Vásquez` (sigla `LD`, foto `public/Candidata 1.webp`)
+- `Lista N° 2 - Sol De María Anticona Gutiérrez` (sigla `ELUN`, foto `public/Candidata 2.webp`)

@@ -66,9 +66,18 @@ create index admin_audit_logs_action_idx on admin_audit_logs(action);
 
 insert into committees (name, short_description, color, active)
 values
-  ('Comite Futuro Verde', 'Propuestas ecologicas y espacios sostenibles.', '#0f766e', true),
-  ('Comite Impulso Estudiantil', 'Actividades culturales y deportivas.', '#0284c7', true),
-  ('Comite Union Escolar', 'Participacion estudiantil y convivencia.', '#f59e0b', true);
+  (
+    'Lista N° 1 - Maria Luisa Oliva Vásquez',
+    null,
+    '#0f766e',
+    true
+  ),
+  (
+    'Lista N° 2 - Sol De María Anticona Gutiérrez',
+    null,
+    '#0284c7',
+    true
+  );
 
 insert into election_settings (process_name, is_open)
 values ('Elecciones del colegio Brüning School', true);
@@ -84,25 +93,25 @@ values
 insert into votes (student_dni, committee_id, vote_blank)
 select '70000001', id, false
 from committees
-where name = 'Comite Futuro Verde'
+where name = 'Lista N° 1 - Maria Luisa Oliva Vásquez'
 limit 1;
 
 insert into votes (student_dni, committee_id, vote_blank)
 select '70000002', id, false
 from committees
-where name = 'Comite Futuro Verde'
+where name = 'Lista N° 1 - Maria Luisa Oliva Vásquez'
 limit 1;
 
 insert into votes (student_dni, committee_id, vote_blank)
 select '70000003', id, false
 from committees
-where name = 'Comite Impulso Estudiantil'
+where name = 'Lista N° 2 - Sol De María Anticona Gutiérrez'
 limit 1;
 
 insert into votes (student_dni, committee_id, vote_blank)
 select '70000004', id, false
 from committees
-where name = 'Comite Union Escolar'
+where name = 'Lista N° 2 - Sol De María Anticona Gutiérrez'
 limit 1;
 
 insert into votes (student_dni, committee_id, vote_blank)

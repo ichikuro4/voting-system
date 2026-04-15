@@ -1,4 +1,5 @@
 import VoteForm from "@/components/VoteForm";
+import { hasAdminSession } from "@/lib/admin-auth";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { getActiveCommittees } from "@/services/committees";
 import { getElectionSettings } from "@/services/election";
@@ -24,8 +25,11 @@ export default async function VotePage({ searchParams }) {
   }
   const resolvedSearchParams = await searchParams;
   const voterDni = normalizeDni(resolvedSearchParams?.dni || "");
+  const hasAdminAccess = await hasAdminSession();
+  const hasValidDocument = /^\d{8,9}$/.test(voterDni);
+  const previewMode = hasAdminAccess && !hasValidDocument;
 
-  if (!/^\d{8,9}$/.test(voterDni)) {
+  if (!hasValidDocument && !hasAdminAccess) {
     return (
       <section className="panel rounded-[2rem] p-8">
         <h1 className="font-serif text-3xl font-bold text-slate-950">Pantalla de votación</h1>
@@ -119,11 +123,18 @@ export default async function VotePage({ searchParams }) {
         </div>
       </div>
 
+      {previewMode ? (
+        <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+          Estás en modo vista administrativa. Puedes revisar la interfaz, pero no registrar votos.
+        </div>
+      ) : null}
+
       <VoteForm
         committees={committees}
         processName={settings.process_name}
         votingOpen={settings.is_open}
-        voterDni={voterDni}
+        voterDni={hasValidDocument ? voterDni : "Vista administrativa"}
+        readOnlyPreview={previewMode}
       />
     </section>
   );

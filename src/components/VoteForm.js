@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import VoteCard from "@/components/VoteCard";
+import { getCommitteeVisualData } from "@/lib/committee-visuals";
 
 const blankOptionValue = "blank";
 const blankPreview = {
@@ -10,7 +11,6 @@ const blankPreview = {
   description: "Registra un voto sin seleccionar un comité.",
   label: "Voto en blanco",
 };
-
 function getPreviewStyle(color) {
   const baseColor = color || "#0f766e";
 
@@ -32,7 +32,13 @@ function getInitials(label) {
     .join("");
 }
 
-export default function VoteForm({ committees, processName, votingOpen, voterDni }) {
+export default function VoteForm({
+  committees,
+  processName,
+  votingOpen,
+  voterDni,
+  readOnlyPreview = false,
+}) {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -56,9 +62,7 @@ export default function VoteForm({ committees, processName, votingOpen, voterDni
       : selectedCommitteeRecord
         ? {
             color: selectedCommitteeRecord.color,
-            description:
-              selectedCommitteeRecord.short_description ||
-              "Comité participante en la elección escolar.",
+            description: "Verifica el nombre de la lista antes de confirmar.",
             label: selectedCommitteeRecord.name || "",
           }
         : null;
@@ -121,6 +125,11 @@ export default function VoteForm({ committees, processName, votingOpen, voterDni
 
   function handleAskConfirmation(event) {
     event.preventDefault();
+
+    if (readOnlyPreview) {
+      setErrorMessage("Modo vista administrativa: no se permite registrar votos.");
+      return;
+    }
 
     if (!votingOpen) {
       setErrorMessage("La votación está cerrada en este momento.");
@@ -245,19 +254,23 @@ export default function VoteForm({ committees, processName, votingOpen, voterDni
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              {committees.map((committee) => (
+              {committees.map((committee) => {
+                const visualData = getCommitteeVisualData(committee.name);
+
+                return (
                 <VoteCard
                   key={committee.id}
                   value={committee.id}
                   title={committee.name}
-                  description={
-                    committee.short_description || "Comité participante en la elección escolar."
-                  }
+                  description=""
                   color={committee.color}
+                  imageSrc={visualData.imageSrc}
+                  logoLabel={visualData.logoLabel}
                   selected={selectedOption === committee.id}
                   onChange={handleSelection}
                 />
-              ))}
+                );
+              })}
 
               <VoteCard
                 value={blankOptionValue}
@@ -325,10 +338,14 @@ export default function VoteForm({ committees, processName, votingOpen, voterDni
                 <div className="mt-5 flex flex-col gap-3">
                   <button
                     type="submit"
-                    disabled={isPending || !votingOpen}
+                    disabled={isPending || !votingOpen || readOnlyPreview}
                     className="rounded-full bg-teal-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-300"
                   >
-                    {isPending ? "Registrando..." : "Confirmar selección"}
+                    {readOnlyPreview
+                      ? "Vista admin (solo lectura)"
+                      : isPending
+                        ? "Registrando..."
+                        : "Confirmar selección"}
                   </button>
 
                   <button
