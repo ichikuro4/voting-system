@@ -5,6 +5,7 @@ import { getActiveCommittees } from "@/services/committees";
 import { getElectionSettings } from "@/services/election";
 import { normalizeDni } from "@/services/voter-access";
 import Link from "next/link";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,14 @@ export default async function VotePage({ searchParams }) {
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-800">
               Elecciones del colegio Brüning School
             </p>
+            <Image
+              src="/onpe-logo.png"
+              alt="Logo de la ONPE"
+              width={180}
+              height={72}
+              className="h-auto w-auto max-w-[180px]"
+              priority
+            />
             <div className="space-y-4">
               <h1 className="max-w-3xl font-serif text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
                 Emite tu voto
