@@ -5,21 +5,14 @@ import {
   getAdminSessionMaxAge,
   validateAdminCredentials,
 } from "@/lib/admin-auth";
-
-function getSafeRedirectPath(nextPath) {
-  if (typeof nextPath === "string" && nextPath.startsWith("/")) {
-    return nextPath;
-  }
-
-  return "/dashboard";
-}
+import { getSafeInternalPath } from "@/lib/safe-redirect";
 
 export async function POST(request) {
   try {
     const body = await request.json();
     const username = String(body.username || "").trim();
     const password = String(body.password || "");
-    const redirectTo = getSafeRedirectPath(body.nextPath);
+    const redirectTo = getSafeInternalPath(body.nextPath, "/dashboard");
 
     if (!validateAdminCredentials(username, password)) {
       return NextResponse.json(

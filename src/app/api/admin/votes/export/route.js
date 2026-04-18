@@ -15,12 +15,15 @@ function escapeCsvValue(value) {
   }
 
   const stringValue = String(value);
+  const spreadsheetSafeValue = /^[\t\r ]*[=+\-@]/.test(stringValue)
+    ? `'${stringValue}`
+    : stringValue;
 
-  if (/[",\n]/.test(stringValue)) {
-    return `"${stringValue.replace(/"/g, '""')}"`;
+  if (/[",\n]/.test(spreadsheetSafeValue)) {
+    return `"${spreadsheetSafeValue.replace(/"/g, '""')}"`;
   }
 
-  return stringValue;
+  return spreadsheetSafeValue;
 }
 
 function buildCsvContent(rows) {
