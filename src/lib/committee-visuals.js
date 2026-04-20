@@ -1,15 +1,19 @@
 const committeeVisualConfig = {
   "Lista N° 1 - Maria Luisa Oliva Vásquez": {
     logoLabel: "UE",
+    candidateImageSrc: "/Candidata%201.webp",
   },
   "Lista N° 2 - Sol De María Anticona Gutiérrez": {
     logoLabel: "BRX",
+    candidateImageSrc: "/Candidata%202.webp",
   },
   "Union Estudiantil": {
     logoLabel: "UE",
+    candidateImageSrc: "/Candidata%201.webp",
   },
   BRUNEX: {
     logoLabel: "BRX",
+    candidateImageSrc: "/Candidata%202.webp",
   },
 };
 
@@ -24,6 +28,7 @@ function getFallbackVisualByName(name) {
   ) {
     return {
       logoLabel: "UE",
+      candidateImageSrc: "/Candidata%201.webp",
     };
   }
 
@@ -34,6 +39,7 @@ function getFallbackVisualByName(name) {
   ) {
     return {
       logoLabel: "BRX",
+      candidateImageSrc: "/Candidata%202.webp",
     };
   }
 

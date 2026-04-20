@@ -67,20 +67,13 @@ export default async function VotePage({ searchParams }) {
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-800">
               Elecciones del colegio Brüning School
             </p>
-            <Image
-              src="/onpe-logo.png"
-              alt="Logo de la ONPE"
-              width={180}
-              height={72}
-              className="h-auto w-auto max-w-[180px]"
-              priority
-            />
             <div className="space-y-4">
               <h1 className="max-w-3xl font-serif text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
                 Emite tu voto
               </h1>
               <p className="max-w-2xl text-base leading-8 text-slate-700 sm:text-lg">
-                Selecciona un comité o voto en blanco, revisa tu elección y confirma.
+                Selecciona una lista y confirma. Si no eliges ninguna opción, el voto se registrará
+                en blanco.
               </p>
             </div>
 
@@ -89,45 +82,20 @@ export default async function VotePage({ searchParams }) {
                 {settings.process_name || "Elecciones del colegio Brüning School"}
               </span>
               <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
-                {committees.length + 1} opciones en pantalla
+                {committees.length} listas en pantalla
               </span>
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/70 bg-white/75 p-5 shadow-[0_24px_55px_rgba(15,23,42,0.08)] backdrop-blur-sm">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-[1.5rem] bg-slate-50 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  Proceso actual
-                </p>
-                <p className="mt-2 text-lg font-bold text-slate-950">
-                  {settings.process_name || "Elecciones del colegio Brüning School"}
-                </p>
-              </div>
-              <div
-                className={`rounded-[1.5rem] p-4 ${
-                  settings.is_open
-                    ? "bg-emerald-50 text-emerald-900"
-                    : "bg-rose-50 text-rose-900"
-                }`}
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em]">Estado</p>
-                <p className="mt-2 text-lg font-bold">
-                  {settings.is_open ? "Votación abierta" : "Votación cerrada"}
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 overflow-hidden rounded-[1.6rem] bg-slate-950 p-5 text-white">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">
-                Instrucciones
-              </p>
-              <ol className="mt-3 space-y-2 text-sm leading-6 text-white/90">
-                <li>1. Selecciona una opción.</li>
-                <li>2. Revisa la selección en el panel lateral.</li>
-                <li>3. Confirma el voto.</li>
-              </ol>
-            </div>
+          <div className="flex items-center justify-center rounded-[2rem] border border-white/70 bg-white/75 p-6 shadow-[0_24px_55px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+            <Image
+              src="/logo-onpe.webp"
+              alt="Logo de la ONPE"
+              width={250}
+              height={250}
+              className="h-auto w-full max-w-[320px] object-contain"
+              priority
+            />
           </div>
         </div>
       </div>
