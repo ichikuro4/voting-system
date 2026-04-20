@@ -20,7 +20,7 @@ create table committees (
 
 create table election_settings (
   id uuid primary key default gen_random_uuid(),
-  process_name text not null default 'Elecciones del colegio Brüning School',
+  process_name text not null default 'Elecciones del Municipio Escolar',
   is_open boolean not null default true,
   created_at timestamptz not null default timezone('utc', now())
 );
@@ -98,7 +98,7 @@ values
   );
 
 insert into election_settings (process_name, is_open)
-values ('Elecciones del colegio Brüning School', true);
+values ('Elecciones del Municipio Escolar', true);
 
 insert into voter_access (dni, has_voted, voted_at, mesa_numero, mesa_aula)
 values
@@ -184,7 +184,7 @@ for select
 to anon, authenticated
 using (true);
 
-comment on table committees is 'Catalogo de comites para la votacion escolar.';
+comment on table committees is 'Catalogo de listas para la votacion del Municipio Escolar.';
 comment on table voter_access is 'Control de acceso por documento (DNI/CE) y mesa para evitar votos duplicados.';
 comment on table votes is 'Registro de votos emitidos, un voto por documento.';
 comment on table election_settings is 'Configuracion general del proceso electoral.';

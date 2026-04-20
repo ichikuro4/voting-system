@@ -7,7 +7,7 @@ export default function Home() {
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div className="space-y-5">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-800">
-              Elecciones del colegio Brüning School
+              Elecciones del Municipio Escolar
             </p>
             <div className="space-y-4">
               <h1 className="max-w-3xl font-serif text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">

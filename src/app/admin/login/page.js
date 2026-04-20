@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Acceso Admin | Brüning School",
+  title: "Acceso Admin | Municipio Escolar",
 };
 
 export default async function AdminLoginPage({ searchParams }) {

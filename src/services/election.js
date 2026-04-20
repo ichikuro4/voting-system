@@ -1,11 +1,31 @@
 import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 
 const defaultSettings = {
-  process_name: "Elecciones del colegio Brüning School",
+  process_name: "Elecciones del Municipio Escolar",
   is_open: true,
 };
 
 const settingsSelectFields = "id, process_name, is_open, created_at";
+
+function normalizeProcessName(processName) {
+  const normalized = String(processName || "").trim();
+  const lower = normalized.toLowerCase();
+
+  if (!normalized) {
+    return defaultSettings.process_name;
+  }
+
+  if (
+    lower.includes("colegio brüning school") ||
+    lower.includes("colegio bruning school") ||
+    lower.includes("comité escolar") ||
+    lower.includes("comite escolar")
+  ) {
+    return defaultSettings.process_name;
+  }
+
+  return normalized;
+}
 
 export async function getElectionSettings() {
   const supabase = createSupabaseServerClient();
@@ -27,6 +47,7 @@ export async function getElectionSettings() {
   return {
     ...defaultSettings,
     ...data,
+    process_name: normalizeProcessName(data.process_name),
   };
 }
 
@@ -62,6 +83,7 @@ export async function setElectionOpenState(isOpen) {
     return {
       ...defaultSettings,
       ...data,
+      process_name: normalizeProcessName(data.process_name),
     };
   }
 
@@ -86,5 +108,6 @@ export async function setElectionOpenState(isOpen) {
   return {
     ...defaultSettings,
     ...data,
+    process_name: normalizeProcessName(data.process_name),
   };
 }

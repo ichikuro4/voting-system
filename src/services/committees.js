@@ -9,7 +9,7 @@ export async function getActiveCommittees() {
     .order("name", { ascending: true });
 
   if (error) {
-    throw new Error("No se pudieron cargar los comités activos.");
+    throw new Error("No se pudieron cargar las listas activas.");
   }
 
   return data ?? [];
@@ -23,7 +23,7 @@ export async function getAllCommittees() {
     .order("name", { ascending: true });
 
   if (error) {
-    throw new Error("No se pudieron cargar los comités.");
+    throw new Error("No se pudieron cargar las listas.");
   }
 
   return data ?? [];
@@ -39,7 +39,7 @@ export async function getActiveCommitteeById(committeeId) {
     .maybeSingle();
 
   if (error) {
-    throw new Error("No se pudo validar el comité seleccionado.");
+    throw new Error("No se pudo validar la lista seleccionada.");
   }
 
   return data;

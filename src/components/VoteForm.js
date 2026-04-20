@@ -157,7 +157,7 @@ export default function VoteForm({
             Selecciona tu opción de voto
           </h2>
           <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-base">
-            {processName || "Elecciones del colegio Brüning School"}.
+            {processName || "Elecciones del Municipio Escolar"}.
           </p>
         </div>
 

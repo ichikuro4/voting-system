@@ -13,7 +13,7 @@ import { getVotingResults } from "@/services/votes";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Resultados | Brüning School",
+  title: "Resultados | Municipio Escolar",
 };
 
 function buildLeaderLabel(leaders) {
@@ -65,17 +65,17 @@ export default async function DashboardPage() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-sky-800">
-              Elecciones del colegio Brüning School
+              Elecciones del Municipio Escolar
             </p>
             <h1 className="font-serif text-4xl font-bold text-slate-950">Resultados de la votación</h1>
             <p className="max-w-2xl text-base leading-7 text-slate-700">
-              Consulta el total de votos, el estado de la jornada y la distribución por comité.
+              Consulta el total de votos, el estado de la jornada y la distribución por lista.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm">
-              {settings.process_name || "Elecciones del colegio Brüning School"}
+              {settings.process_name || "Elecciones del Municipio Escolar"}
             </span>
             <span
               className={`rounded-full px-4 py-2 text-sm font-semibold ${
@@ -120,7 +120,7 @@ export default async function DashboardPage() {
           description={`${results.blankPercentage}% del total`}
         />
         <StatsCard
-          title="Comités activos"
+          title="Listas activas"
           value={results.resultsByCommittee.filter((item) => item.active).length}
           accent="teal"
           description="Opciones disponibles"
@@ -169,7 +169,7 @@ export default async function DashboardPage() {
             <div>
               <h2 className="text-xl font-bold text-slate-950">Gráfica de resultados</h2>
               <p className="mt-2 text-sm text-slate-600">
-                Distribución de votos por comité y voto en blanco.
+                Distribución de votos por lista y voto en blanco.
               </p>
             </div>
           </div>

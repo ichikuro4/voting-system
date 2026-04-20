@@ -10,7 +10,7 @@ import Image from "next/image";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Votar | Brüning School",
+  title: "Votar | Municipio Escolar",
 };
 
 export default async function VotePage({ searchParams }) {
@@ -61,7 +61,7 @@ export default async function VotePage({ searchParams }) {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(19rem,0.8fr)] lg:items-end">
           <div className="space-y-5">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-800">
-              Elecciones del colegio Brüning School
+              Elecciones del Municipio Escolar
             </p>
             <div className="space-y-4">
               <h1 className="max-w-3xl font-serif text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
@@ -75,7 +75,7 @@ export default async function VotePage({ searchParams }) {
 
             <div className="flex flex-wrap gap-3">
               <span className="rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm">
-                {settings.process_name || "Elecciones del colegio Brüning School"}
+                {settings.process_name || "Elecciones del Municipio Escolar"}
               </span>
               <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
                 {committees.length} listas en pantalla

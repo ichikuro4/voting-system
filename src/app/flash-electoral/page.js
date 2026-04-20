@@ -11,7 +11,7 @@ import Image from "next/image";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Flash Electoral | Brüning School",
+  title: "Flash Electoral | Municipio Escolar",
 };
 
 function getLogoInitials(visualData, listDisplayName, candidateDisplayName, committeeName) {
@@ -39,7 +39,7 @@ export default async function FlashElectoralPage() {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(19rem,0.8fr)] lg:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-sky-800">
-              Elecciones del colegio Brüning School
+              Elecciones del Municipio Escolar
             </p>
             <h1 className="mt-4 font-serif text-4xl font-bold text-slate-950 sm:text-5xl">
               Flash Electoral

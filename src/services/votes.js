@@ -33,11 +33,11 @@ export async function registerVote({ dni, committeeId = null, voteBlank = false 
   const normalizedDni = await assertVoterCanVote(dni);
 
   if (!normalizedVoteBlank && !normalizedCommitteeId) {
-    throw new Error("Debes seleccionar un comité o marcar voto en blanco.");
+    throw new Error("Debes seleccionar una lista o marcar voto en blanco.");
   }
 
   if (normalizedVoteBlank && normalizedCommitteeId) {
-    throw new Error("El voto en blanco no debe incluir un comité.");
+    throw new Error("El voto en blanco no debe incluir una lista.");
   }
 
   const settings = await getElectionSettings();
@@ -50,7 +50,7 @@ export async function registerVote({ dni, committeeId = null, voteBlank = false 
     const committee = await getActiveCommitteeById(normalizedCommitteeId);
 
     if (!committee) {
-      throw new Error("El comité seleccionado no está disponible.");
+      throw new Error("La lista seleccionada no está disponible.");
     }
   }
 

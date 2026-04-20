@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata = {
-  title: "Elecciones | Brüning School",
-  description: "Plataforma oficial de votación para las elecciones del colegio Brüning School.",
+  title: "Elecciones | Municipio Escolar",
+  description: "Plataforma oficial de votación para las Elecciones del Municipio Escolar.",
 };
 
 export default function RootLayout({ children }) {
@@ -18,14 +18,14 @@ export default function RootLayout({ children }) {
                 <span className="block">
                   <Image
                     src="/logo_school.webp"
-                    alt="Logo del colegio Brüning School"
+                    alt="Logo del Municipio Escolar"
                     width={420}
                     height={150}
                     priority
                     className="h-12 w-auto object-contain sm:h-14 md:h-16"
                   />
                 </span>
-                <span className="sr-only">Brüning School - Elecciones escolares</span>
+                <span className="sr-only">Municipio Escolar - Plataforma de elecciones</span>
               </Link>
 
               <nav className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-700">
