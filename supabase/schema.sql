@@ -28,9 +28,26 @@ create table election_settings (
 create table voter_access (
   dni text primary key,
   has_voted boolean not null default false,
+  mesa_numero smallint,
+  mesa_aula text,
   created_at timestamptz not null default timezone('utc', now()),
   voted_at timestamptz,
-  constraint voter_access_dni_check check (dni ~ '^[0-9]{8,9}$')
+  constraint voter_access_dni_check check (dni ~ '^[0-9]{8,9}$'),
+  constraint voter_access_mesa_numero_check check (mesa_numero is null or mesa_numero between 1 and 7),
+  constraint voter_access_mesa_aula_check check (
+    mesa_aula is null
+    or mesa_aula in ('1AS', '1BS', '2AS', '2BS', '3AS', '3BS', '4TO')
+  ),
+  constraint voter_access_mesa_mapping_check check (
+    (mesa_numero is null and mesa_aula is null)
+    or (mesa_numero = 1 and mesa_aula = '1AS')
+    or (mesa_numero = 2 and mesa_aula = '1BS')
+    or (mesa_numero = 3 and mesa_aula = '2AS')
+    or (mesa_numero = 4 and mesa_aula = '2BS')
+    or (mesa_numero = 5 and mesa_aula = '3AS')
+    or (mesa_numero = 6 and mesa_aula = '3BS')
+    or (mesa_numero = 7 and mesa_aula = '4TO')
+  )
 );
 
 create table votes (
@@ -61,6 +78,7 @@ create index votes_committee_id_idx on votes(committee_id);
 create index votes_created_at_idx on votes(created_at desc);
 create index committees_active_idx on committees(active);
 create index voter_access_has_voted_idx on voter_access(has_voted);
+create index voter_access_mesa_numero_idx on voter_access(mesa_numero);
 create index admin_audit_logs_created_at_idx on admin_audit_logs(created_at desc);
 create index admin_audit_logs_action_idx on admin_audit_logs(action);
 
@@ -82,13 +100,13 @@ values
 insert into election_settings (process_name, is_open)
 values ('Elecciones del colegio Brüning School', true);
 
-insert into voter_access (dni, has_voted, voted_at)
+insert into voter_access (dni, has_voted, voted_at, mesa_numero, mesa_aula)
 values
-  ('70000001', true, timezone('utc', now())),
-  ('70000002', true, timezone('utc', now())),
-  ('70000003', true, timezone('utc', now())),
-  ('70000004', true, timezone('utc', now())),
-  ('70000005', true, timezone('utc', now()));
+  ('70000001', true, timezone('utc', now()), 1, '1AS'),
+  ('70000002', true, timezone('utc', now()), 2, '1BS'),
+  ('70000003', true, timezone('utc', now()), 3, '2AS'),
+  ('70000004', true, timezone('utc', now()), 4, '2BS'),
+  ('70000005', true, timezone('utc', now()), 5, '3AS');
 
 insert into votes (student_dni, committee_id, vote_blank)
 select '70000001', id, false
@@ -167,7 +185,7 @@ to anon, authenticated
 using (true);
 
 comment on table committees is 'Catalogo de comites para la votacion escolar.';
-comment on table voter_access is 'Control de acceso por documento (DNI/CE) para evitar votos duplicados.';
+comment on table voter_access is 'Control de acceso por documento (DNI/CE) y mesa para evitar votos duplicados.';
 comment on table votes is 'Registro de votos emitidos, un voto por documento.';
 comment on table election_settings is 'Configuracion general del proceso electoral.';
 comment on table admin_audit_logs is 'Bitacora de acciones administrativas del sistema.';

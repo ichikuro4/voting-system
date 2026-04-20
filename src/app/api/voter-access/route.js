@@ -6,12 +6,18 @@ export const dynamic = "force-dynamic";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const result = await registerVoterAccess(body?.dni);
+    const result = await registerVoterAccess({
+      dni: body?.dni,
+      mesaNumero: body?.mesaNumero,
+      mesaAula: body?.mesaAula,
+    });
 
     return NextResponse.json({
       success: true,
       message: "Documento habilitado para votar.",
       dni: result.dni,
+      mesaNumero: result.mesaNumero,
+      mesaAula: result.mesaAula,
       alreadyRegistered: result.alreadyRegistered,
     });
   } catch (error) {

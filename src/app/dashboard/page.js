@@ -1,6 +1,7 @@
 import AdminLogoutButton from "@/components/AdminLogoutButton";
 import ElectionStatusToggleButton from "@/components/ElectionStatusToggleButton";
 import ExportVotesButton from "@/components/ExportVotesButton";
+import MesaResultsChartPanel from "@/components/MesaResultsChartPanel";
 import ResetVotesButton from "@/components/ResetVotesButton";
 import ResultsChartClient from "@/components/ResultsChartClient";
 import StatsCard from "@/components/StatsCard";
@@ -130,6 +131,36 @@ export default async function DashboardPage() {
           accent="rose"
           description="Líder actual según votos emitidos"
         />
+      </div>
+
+      <div className="panel-strong rounded-[1.75rem] p-6">
+        <h2 className="text-xl font-bold text-slate-950">Votos por mesa</h2>
+        <p className="mt-2 text-sm text-slate-600">
+          Distribución total de votos registrados por mesa.
+        </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {results.votesByMesa.map((mesa) => (
+            <div
+              key={mesa.mesaNumero}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Mesa {mesa.mesaNumero}
+              </p>
+              <p className="mt-2 text-lg font-bold text-slate-950">{mesa.mesaAula}</p>
+              <p className="mt-1 text-sm text-slate-700">{mesa.votes} votos</p>
+            </div>
+          ))}
+        </div>
+        {results.votesWithoutMesa > 0 ? (
+          <p className="mt-4 text-sm text-amber-800">
+            Hay {results.votesWithoutMesa} voto(s) sin mesa asignada en registros históricos.
+          </p>
+        ) : null}
+      </div>
+
+      <div className="panel-strong rounded-[1.75rem] p-6">
+        <MesaResultsChartPanel mesaBreakdown={results.mesaBreakdown} />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">

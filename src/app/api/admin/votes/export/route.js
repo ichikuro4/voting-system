@@ -34,6 +34,8 @@ function buildCsvContent(rows) {
     "vote_blank",
     "committee_id",
     "committee_name",
+    "mesa_numero",
+    "mesa_aula",
   ];
   const lines = [headers.join(",")];
 
@@ -46,6 +48,8 @@ function buildCsvContent(rows) {
         escapeCsvValue(row.vote_blank),
         escapeCsvValue(row.committee_id),
         escapeCsvValue(row.committee_name),
+        escapeCsvValue(row.mesa_numero),
+        escapeCsvValue(row.mesa_aula),
       ].join(",")
     );
   });

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { getMesaOptionByAula, MESA_OPTIONS } from "@/lib/mesa-config";
 
 const MAX_DOCUMENT_LENGTH = 9;
 
@@ -16,6 +17,7 @@ function isValidDocument(value) {
 export default function HomeStartVotingForm() {
   const router = useRouter();
   const [dni, setDni] = useState("");
+  const [mesaAula, setMesaAula] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isPending, startTransition] = useTransition();
 
@@ -24,12 +26,23 @@ export default function HomeStartVotingForm() {
     setErrorMessage("");
   }
 
+  function handleMesaChange(event) {
+    setMesaAula(event.target.value);
+    setErrorMessage("");
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     const normalizedDni = normalizeDni(dni);
+    const mesa = getMesaOptionByAula(mesaAula);
 
     if (!isValidDocument(normalizedDni)) {
       setErrorMessage("Ingresa un DNI (8 dígitos) o carnet de extranjería (9 dígitos) válido.");
+      return;
+    }
+
+    if (!mesa) {
+      setErrorMessage("Selecciona la mesa correspondiente.");
       return;
     }
 
@@ -44,6 +57,8 @@ export default function HomeStartVotingForm() {
           },
           body: JSON.stringify({
             dni: normalizedDni,
+            mesaNumero: mesa.mesaNumero,
+            mesaAula: mesa.mesaAula,
           }),
         });
 
@@ -70,7 +85,8 @@ export default function HomeStartVotingForm() {
           Ingresa tu documento
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-600">
-          Acepta DNI (8 dígitos) o carnet de extranjería (9 dígitos). Solo podrás votar una vez.
+          Acepta DNI (8 dígitos) o carnet de extranjería (9 dígitos). Selecciona tu mesa antes de
+          continuar.
         </p>
       </div>
 
@@ -90,6 +106,26 @@ export default function HomeStartVotingForm() {
           placeholder="Ejemplo: 12345678 o 123456789"
           className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
         />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="mesa" className="text-sm font-semibold text-slate-800">
+          Mesa
+        </label>
+        <select
+          id="mesa"
+          name="mesa"
+          value={mesaAula}
+          onChange={handleMesaChange}
+          className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+        >
+          <option value="">Selecciona tu mesa</option>
+          {MESA_OPTIONS.map((mesa) => (
+            <option key={mesa.mesaAula} value={mesa.mesaAula}>
+              {mesa.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {errorMessage ? (
