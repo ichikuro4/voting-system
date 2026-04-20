@@ -6,6 +6,7 @@ import {
 } from "@/lib/committee-visuals";
 import { getElectionSettings } from "@/services/election";
 import { getVotingResults } from "@/services/votes";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -35,24 +36,39 @@ export default async function FlashElectoralPage() {
   return (
     <section className="space-y-6">
       <div className="panel rounded-[2rem] p-8 sm:p-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-sky-800">
-          Elecciones del colegio Brüning School
-        </p>
-        <h1 className="mt-4 font-serif text-4xl font-bold text-slate-950 sm:text-5xl">
-          Flash Electoral
-        </h1>
-        <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700 sm:text-lg">
-          Visualización en tiempo real del porcentaje por lista.
-        </p>
-        <FlashAutoRefresh />
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(19rem,0.8fr)] lg:items-end">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-sky-800">
+              Elecciones del colegio Brüning School
+            </p>
+            <h1 className="mt-4 font-serif text-4xl font-bold text-slate-950 sm:text-5xl">
+              Flash Electoral
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-slate-700 sm:text-lg">
+              Visualización en tiempo real del porcentaje por lista.
+            </p>
+            <FlashAutoRefresh />
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm">
-            {settings.process_name}
-          </span>
-          <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
-            Total de votos: {results.totalVotes}
-          </span>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm">
+                {settings.process_name}
+              </span>
+              <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
+                Total de votos: {results.totalVotes}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center rounded-[2rem] border border-white/70 bg-white/75 p-6 shadow-[0_24px_55px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+            <Image
+              src="/logo-onpe.webp"
+              alt="Logo de la ONPE"
+              width={250}
+              height={250}
+              className="h-auto w-full max-w-[320px] object-contain"
+              priority
+            />
+          </div>
         </div>
       </div>
 

@@ -57,12 +57,8 @@ export default async function VotePage({ searchParams }) {
 
   return (
     <section className="space-y-8">
-      <div className="panel relative overflow-hidden rounded-[2.4rem] p-8 sm:p-10">
-        <div className="absolute left-[-5rem] top-[-5rem] h-36 w-36 rounded-full bg-sky-300/25 blur-3xl" />
-        <div className="absolute right-[-3rem] top-[2rem] h-28 w-28 rounded-full bg-amber-300/30 blur-3xl" />
-        <div className="absolute bottom-[-4rem] right-[8rem] h-36 w-36 rounded-full bg-teal-300/25 blur-3xl" />
-
-        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(19rem,0.8fr)] lg:items-end">
+      <div className="panel rounded-[2.4rem] p-8 sm:p-10">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(19rem,0.8fr)] lg:items-end">
           <div className="space-y-5">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-800">
               Elecciones del colegio Brüning School
