@@ -1,26 +1,39 @@
 const committeeVisualConfig = {
   "Lista N° 1 - Maria Luisa Oliva Vásquez": {
-    logoLabel: "LD",
-    imageSrc: "/Candidata%201.webp",
+    logoLabel: "UE",
   },
   "Lista N° 2 - Sol De María Anticona Gutiérrez": {
-    logoLabel: "ELUN",
-    imageSrc: "/Candidata%202.webp",
+    logoLabel: "BRX",
+  },
+  "Union Estudiantil": {
+    logoLabel: "UE",
+  },
+  BRUNEX: {
+    logoLabel: "BRX",
   },
 };
 
 function getFallbackVisualByName(name) {
-  if (name.includes("Lista N° 1") || name.includes("Lista N 1")) {
+  const normalizedName = name.toLowerCase();
+
+  if (
+    name.includes("Lista N° 1") ||
+    name.includes("Lista N 1") ||
+    normalizedName.includes("union estudiantil") ||
+    normalizedName.includes("unión estudiantil")
+  ) {
     return {
-      logoLabel: "LD",
-      imageSrc: "/Candidata%201.webp",
+      logoLabel: "UE",
     };
   }
 
-  if (name.includes("Lista N° 2") || name.includes("Lista N 2")) {
+  if (
+    name.includes("Lista N° 2") ||
+    name.includes("Lista N 2") ||
+    normalizedName.includes("brunex")
+  ) {
     return {
-      logoLabel: "ELUN",
-      imageSrc: "/Candidata%202.webp",
+      logoLabel: "BRX",
     };
   }
 
@@ -52,6 +65,23 @@ export function getCandidateDisplayName(committeeName) {
 export function getListDisplayName(committeeName) {
   if (!committeeName) {
     return "";
+  }
+
+  if (
+    committeeName.includes("Lista N° 1") ||
+    committeeName.includes("Lista N 1") ||
+    committeeName.toLowerCase().includes("union estudiantil") ||
+    committeeName.toLowerCase().includes("unión estudiantil")
+  ) {
+    return "Union Estudiantil";
+  }
+
+  if (
+    committeeName.includes("Lista N° 2") ||
+    committeeName.includes("Lista N 2") ||
+    committeeName.toLowerCase().includes("brunex")
+  ) {
+    return "BRUNEX";
   }
 
   const separatorIndex = committeeName.indexOf(" - ");

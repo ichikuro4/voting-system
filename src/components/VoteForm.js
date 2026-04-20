@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import VoteCard from "@/components/VoteCard";
-import { getCommitteeVisualData } from "@/lib/committee-visuals";
+import { getCandidateDisplayName, getListDisplayName } from "@/lib/committee-visuals";
 
 const blankOptionValue = "blank";
 const blankPreview = {
@@ -47,11 +47,14 @@ export default function VoteForm({
   const dialogRef = useRef(null);
   const confirmButtonRef = useRef(null);
   const selectedCommitteeRecord = committees.find((committee) => committee.id === selectedOption);
+  const selectedCommitteeListName = selectedCommitteeRecord
+    ? getListDisplayName(selectedCommitteeRecord.name)
+    : "";
 
   const selectedLabel =
     selectedOption === blankOptionValue
       ? "Voto en blanco"
-      : selectedCommitteeRecord?.name || "";
+      : selectedCommitteeListName || selectedCommitteeRecord?.name || "";
   const selectedCommittee =
     selectedOption === blankOptionValue
       ? {
@@ -63,7 +66,7 @@ export default function VoteForm({
         ? {
             color: selectedCommitteeRecord.color,
             description: "Verifica el nombre de la lista antes de confirmar.",
-            label: selectedCommitteeRecord.name || "",
+            label: selectedCommitteeListName || selectedCommitteeRecord.name || "",
           }
         : null;
   const previewStyle = getPreviewStyle(selectedCommittee?.color || "#0f766e");
@@ -253,19 +256,23 @@ export default function VoteForm({
               </span>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4">
               {committees.map((committee) => {
-                const visualData = getCommitteeVisualData(committee.name);
+                const listDisplayName = getListDisplayName(committee.name);
+                const candidateDisplayName = getCandidateDisplayName(committee.name);
+                const hasCandidateName =
+                  candidateDisplayName &&
+                  candidateDisplayName.trim() &&
+                  candidateDisplayName !== listDisplayName;
 
                 return (
                 <VoteCard
                   key={committee.id}
                   value={committee.id}
-                  title={committee.name}
-                  description=""
+                  title={listDisplayName}
+                  candidateName={hasCandidateName ? candidateDisplayName : ""}
+                  description="Toca para registrar tu voto por esta lista."
                   color={committee.color}
-                  imageSrc={visualData.imageSrc}
-                  logoLabel={visualData.logoLabel}
                   selected={selectedOption === committee.id}
                   onChange={handleSelection}
                 />

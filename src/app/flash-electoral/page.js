@@ -1,4 +1,3 @@
-import Image from "next/image";
 import FlashAutoRefresh from "@/components/FlashAutoRefresh";
 import {
   getCandidateDisplayName,
@@ -13,6 +12,21 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Flash Electoral | Brüning School",
 };
+
+function getLogoInitials(visualData, listDisplayName, candidateDisplayName, committeeName) {
+  if (visualData.logoLabel) {
+    return visualData.logoLabel.toUpperCase();
+  }
+
+  const baseText = listDisplayName || candidateDisplayName || committeeName;
+
+  return baseText
+    .split(/\s+/)
+    .map((word) => word.trim().charAt(0))
+    .join("")
+    .slice(0, 4)
+    .toUpperCase();
+}
 
 export default async function FlashElectoralPage() {
   const [results, settings] = await Promise.all([getVotingResults(), getElectionSettings()]);
@@ -47,6 +61,12 @@ export default async function FlashElectoralPage() {
           const visualData = getCommitteeVisualData(committee.name);
           const listDisplayName = getListDisplayName(committee.name);
           const candidateDisplayName = getCandidateDisplayName(committee.name);
+          const logoInitials = getLogoInitials(
+            visualData,
+            listDisplayName,
+            candidateDisplayName,
+            committee.name
+          );
 
           return (
             <article
@@ -54,20 +74,12 @@ export default async function FlashElectoralPage() {
               className="panel-strong rounded-[2rem] border border-slate-200 p-5 sm:p-6"
             >
               <div className="grid grid-cols-[minmax(0,1fr)_3.2rem] gap-3">
-                <div className="overflow-hidden rounded-[1.4rem] border border-slate-200 bg-slate-100">
-                  {visualData.imageSrc ? (
-                    <Image
-                      src={visualData.imageSrc}
-                      alt={`Foto de ${candidateDisplayName || committee.name}`}
-                      width={800}
-                      height={1200}
-                      className="h-[26rem] w-full object-contain object-center"
-                    />
-                  ) : (
-                    <div className="flex h-[26rem] items-center justify-center px-5 text-center text-sm font-semibold text-slate-500">
-                      Sin foto disponible
-                    </div>
-                  )}
+                <div className="flex h-[26rem] items-center justify-center rounded-[1.4rem] border border-slate-200 bg-gradient-to-b from-slate-100 to-white p-6">
+                  <div className="flex h-36 w-36 items-center justify-center rounded-full border-4 border-slate-900 bg-slate-50 shadow-sm sm:h-44 sm:w-44">
+                    <p className="text-4xl font-black uppercase tracking-[0.08em] text-slate-900 sm:text-5xl">
+                      {logoInitials}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-center rounded-[1.1rem] bg-slate-900 px-2 py-3 text-white">
@@ -90,7 +102,7 @@ export default async function FlashElectoralPage() {
                     {listDisplayName || "Lista"}
                   </p>
                   <p className="mt-1 text-2xl font-black text-slate-950">
-                    {visualData.logoLabel || "LISTA"}
+                    {logoInitials || "LISTA"}
                   </p>
                 </div>
                 <div className="text-right">
