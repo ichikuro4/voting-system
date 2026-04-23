@@ -194,6 +194,7 @@ export default function VoteForm({
                   title={listDisplayName}
                   candidateName={hasCandidateName ? candidateDisplayName : ""}
                   logoLabel={visualData.logoLabel}
+                  logoImageSrc={visualData.logoImageSrc}
                   candidateImageSrc={visualData.candidateImageSrc}
                   color={committee.color}
                   selected={selectedOption === committee.id}

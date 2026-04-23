@@ -14,6 +14,7 @@ export default function VoteCard({
   title,
   candidateName,
   logoLabel,
+  logoImageSrc,
   candidateImageSrc,
   selected,
   onChange,
@@ -57,10 +58,24 @@ export default function VoteCard({
       <div className="mt-4 grid grid-cols-2 gap-3">
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
           <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">Logo</p>
-          <div className="mt-2 flex aspect-square w-full items-center justify-center rounded-lg border border-slate-200 bg-white">
-            <span className="text-2xl font-black uppercase tracking-[0.08em] text-slate-900">
-              {logoInitials}
-            </span>
+          <div className="mt-2 aspect-square w-full overflow-hidden rounded-lg border border-slate-200 bg-white">
+            {logoImageSrc ? (
+              <div className="relative h-full w-full">
+                <Image
+                  src={logoImageSrc}
+                  alt={`Logo de ${title}`}
+                  fill
+                  sizes="160px"
+                  className="object-contain p-2"
+                />
+              </div>
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <span className="text-2xl font-black uppercase tracking-[0.08em] text-slate-900">
+                  {logoInitials}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
