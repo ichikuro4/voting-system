@@ -1,39 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import VoteCard from "@/components/VoteCard";
-
-const SIMULATION_LIST_NAMES = [
-  "Horizonte Estudiantil",
-  "Impulso Juvenil",
-  "Futuro en Marcha",
-  "Voz Escolar",
-  "Unidad en Accion",
-  "Renueva Colegio",
-];
-
-const SIMULATION_CANDIDATE_NAMES = [
-  "Alex Rojas",
-  "Camila Pena",
-  "Diego Salas",
-  "Valeria Nunez",
-  "Mateo Ruiz",
-  "Luciana Vega",
-  "Thiago Castro",
-  "Sofia Paredes",
-];
-
-function getSeedFromString(value) {
-  let hash = 0;
-
-  for (let index = 0; index < value.length; index += 1) {
-    hash = (hash << 5) - hash + value.charCodeAt(index);
-    hash |= 0;
-  }
-
-  return Math.abs(hash);
-}
+import {
+  getCandidateDisplayName,
+  getCommitteeVisualData,
+  getListDisplayName,
+} from "@/lib/committee-visuals";
 
 export default function VoteForm({
   committees,
@@ -49,27 +23,10 @@ export default function VoteForm({
   const [isPending, startTransition] = useTransition();
   const dialogRef = useRef(null);
   const confirmButtonRef = useRef(null);
-  const simulatedCommittees = useMemo(
-    () =>
-      committees.map((committee, index) => {
-        const seed = getSeedFromString(`${committee.id}-${committee.name}`);
-        const listName = SIMULATION_LIST_NAMES[seed % SIMULATION_LIST_NAMES.length];
-        const candidateName =
-          SIMULATION_CANDIDATE_NAMES[(seed + index) % SIMULATION_CANDIDATE_NAMES.length];
-
-        return {
-          id: committee.id,
-          color: committee.color,
-          listName,
-          candidateName,
-        };
-      }),
-    [committees]
-  );
-  const selectedCommitteeRecord = simulatedCommittees.find(
-    (committee) => committee.id === selectedOption
-  );
-  const selectedCommitteeListName = selectedCommitteeRecord ? selectedCommitteeRecord.listName : "";
+  const selectedCommitteeRecord = committees.find((committee) => committee.id === selectedOption);
+  const selectedCommitteeListName = selectedCommitteeRecord
+    ? getListDisplayName(selectedCommitteeRecord.name)
+    : "";
   const selectedLabel = selectedCommitteeListName || "Voto en blanco";
 
   useEffect(() => {
@@ -221,20 +178,30 @@ export default function VoteForm({
           ) : null}
 
           <div className="grid gap-4 md:grid-cols-2">
-            {simulatedCommittees.map((committee) => (
-              <VoteCard
-                key={committee.id}
-                value={committee.id}
-                title={committee.listName}
-                candidateName={committee.candidateName}
-                logoLabel="SIM"
-                logoImageSrc=""
-                candidateImageSrc=""
-                color={committee.color}
-                selected={selectedOption === committee.id}
-                onChange={handleSelection}
-              />
-            ))}
+            {committees.map((committee) => {
+              const listDisplayName = getListDisplayName(committee.name);
+              const candidateDisplayName = getCandidateDisplayName(committee.name);
+              const visualData = getCommitteeVisualData(committee.name);
+              const hasCandidateName =
+                candidateDisplayName &&
+                candidateDisplayName.trim() &&
+                candidateDisplayName !== listDisplayName;
+
+              return (
+                <VoteCard
+                  key={committee.id}
+                  value={committee.id}
+                  title={listDisplayName}
+                  candidateName={hasCandidateName ? candidateDisplayName : ""}
+                  logoLabel={visualData.logoLabel}
+                  logoImageSrc={visualData.logoImageSrc}
+                  candidateImageSrc={visualData.candidateImageSrc}
+                  color={committee.color}
+                  selected={selectedOption === committee.id}
+                  onChange={handleSelection}
+                />
+              );
+            })}
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
