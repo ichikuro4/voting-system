@@ -9,6 +9,7 @@ import { requireAdminSession } from "@/lib/admin-auth";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { getElectionSettings } from "@/services/election";
 import { getVotingResults } from "@/services/votes";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -98,10 +99,16 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className="mt-5 grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-5 grid items-stretch gap-3 md:grid-cols-2 xl:grid-cols-5">
           <ElectionStatusToggleButton isOpen={settings.is_open} />
           <ResetVotesButton />
           <ExportVotesButton />
+          <Link
+            href="/flash-electoral"
+            className="inline-flex items-center justify-center rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-center text-sm font-bold text-sky-900 transition hover:border-sky-300 hover:bg-sky-100"
+          >
+            Ver Flash Electoral
+          </Link>
           <AdminLogoutButton />
         </div>
       </div>

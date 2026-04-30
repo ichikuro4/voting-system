@@ -11,7 +11,7 @@ function normalizeDni(value) {
 }
 
 function isValidDocument(value) {
-  return /^\d{8,9}$/.test(value);
+  return /^\d{7,9}$/.test(value);
 }
 
 export default function HomeStartVotingForm() {
@@ -37,7 +37,7 @@ export default function HomeStartVotingForm() {
     const mesa = getMesaOptionByAula(mesaAula);
 
     if (!isValidDocument(normalizedDni)) {
-      setErrorMessage("Ingresa un DNI (8 dígitos) o carnet de extranjería (9 dígitos) válido.");
+      setErrorMessage("Ingresa un documento válido de 7 a 9 dígitos.");
       return;
     }
 
@@ -85,8 +85,7 @@ export default function HomeStartVotingForm() {
           Ingresa tu documento
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-600">
-          Acepta DNI (8 dígitos) o carnet de extranjería (9 dígitos). Selecciona tu mesa antes de
-          continuar.
+          Acepta documentos de 7 a 9 dígitos. Selecciona tu mesa antes de continuar.
         </p>
       </div>
 

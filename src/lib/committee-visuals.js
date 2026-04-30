@@ -1,23 +1,23 @@
 const committeeVisualConfig = {
   "Lista N° 1 - Maria Luisa Oliva Vásquez": {
-    logoLabel: "UE",
-    logoImageSrc: "/lista-2-logo.png",
+    logoLabel: "BRX",
+    logoImageSrc: "/lista-1-logo.png",
     candidateImageSrc: "/lista-1-foto.webp",
   },
   "Lista N° 2 - Sol De María Anticona Gutiérrez": {
-    logoLabel: "BRX",
-    logoImageSrc: "/lista-1-logo.png",
+    logoLabel: "UE",
+    logoImageSrc: "/lista-2-logo.png",
     candidateImageSrc: "/lista-2-foto.webp",
   },
   "Union Estudiantil": {
     logoLabel: "UE",
     logoImageSrc: "/lista-2-logo.png",
-    candidateImageSrc: "/lista-1-foto.webp",
+    candidateImageSrc: "/lista-2-foto.webp",
   },
   BRUNEX: {
     logoLabel: "BRX",
     logoImageSrc: "/lista-1-logo.png",
-    candidateImageSrc: "/lista-2-foto.webp",
+    candidateImageSrc: "/lista-1-foto.webp",
   },
 };
 
@@ -27,12 +27,11 @@ function getFallbackVisualByName(name) {
   if (
     name.includes("Lista N° 1") ||
     name.includes("Lista N 1") ||
-    normalizedName.includes("union estudiantil") ||
-    normalizedName.includes("unión estudiantil")
+    normalizedName.includes("brunex")
   ) {
     return {
-      logoLabel: "UE",
-      logoImageSrc: "/lista-2-logo.png",
+      logoLabel: "BRX",
+      logoImageSrc: "/lista-1-logo.png",
       candidateImageSrc: "/lista-1-foto.webp",
     };
   }
@@ -40,11 +39,12 @@ function getFallbackVisualByName(name) {
   if (
     name.includes("Lista N° 2") ||
     name.includes("Lista N 2") ||
-    normalizedName.includes("brunex")
+    normalizedName.includes("union estudiantil") ||
+    normalizedName.includes("unión estudiantil")
   ) {
     return {
-      logoLabel: "BRX",
-      logoImageSrc: "/lista-1-logo.png",
+      logoLabel: "UE",
+      logoImageSrc: "/lista-2-logo.png",
       candidateImageSrc: "/lista-2-foto.webp",
     };
   }
@@ -79,21 +79,23 @@ export function getListDisplayName(committeeName) {
     return "";
   }
 
+  const normalizedName = committeeName.toLowerCase();
+
   if (
     committeeName.includes("Lista N° 1") ||
     committeeName.includes("Lista N 1") ||
-    committeeName.toLowerCase().includes("union estudiantil") ||
-    committeeName.toLowerCase().includes("unión estudiantil")
+    normalizedName.includes("brunex")
   ) {
-    return "Union Estudiantil";
+    return "BRUNEX";
   }
 
   if (
     committeeName.includes("Lista N° 2") ||
     committeeName.includes("Lista N 2") ||
-    committeeName.toLowerCase().includes("brunex")
+    normalizedName.includes("union estudiantil") ||
+    normalizedName.includes("unión estudiantil")
   ) {
-    return "BRUNEX";
+    return "UNION ESTUDIANTIL";
   }
 
   const separatorIndex = committeeName.indexOf(" - ");

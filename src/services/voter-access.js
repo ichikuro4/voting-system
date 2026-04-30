@@ -1,8 +1,8 @@
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 import { isValidMesaPair, normalizeMesaAula } from "@/lib/mesa-config";
 import { getElectionSettings } from "@/services/election";
 
-const DOCUMENT_PATTERN = /^\d{8,9}$/;
+const DOCUMENT_PATTERN = /^\d{7,9}$/;
 
 export function normalizeDni(value) {
   return String(value || "").replace(/\D/g, "").slice(0, 9);
@@ -12,7 +12,7 @@ export function validateDni(value) {
   const normalizedDni = normalizeDni(value);
 
   if (!DOCUMENT_PATTERN.test(normalizedDni)) {
-    throw new Error("Ingresa un DNI (8 dígitos) o carnet de extranjería (9 dígitos) válido.");
+    throw new Error("Ingresa un documento válido de 7 a 9 dígitos.");
   }
 
   return normalizedDni;
@@ -30,6 +30,32 @@ function validateMesaSelection(mesaNumero, mesaAula) {
     mesaNumero: normalizedMesaNumero,
     mesaAula: normalizedMesaAula,
   };
+}
+
+async function assertDniBelongsToMesa({ normalizedDni, mesaNumero, mesaAula }) {
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from("eligible_voters")
+    .select("dni, mesa_numero, mesa_aula")
+    .eq("dni", normalizedDni)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error("No se pudo validar el documento en el padrón.");
+  }
+
+  if (!data) {
+    throw new Error("Este documento no está registrado en el padrón de votación.");
+  }
+
+  const registeredMesaNumero = Number(data.mesa_numero);
+  const registeredMesaAula = normalizeMesaAula(data.mesa_aula);
+
+  if (registeredMesaNumero !== mesaNumero || registeredMesaAula !== mesaAula) {
+    throw new Error(
+      `Este documento corresponde a la Mesa ${registeredMesaNumero} (${registeredMesaAula}).`
+    );
+  }
 }
 
 async function resolveExistingEntryMesaPolicy({
@@ -83,6 +109,12 @@ export async function registerVoterAccess({ dni, mesaNumero, mesaAula }) {
   if (!settings.is_open) {
     throw new Error("La votación se encuentra cerrada.");
   }
+
+  await assertDniBelongsToMesa({
+    normalizedDni,
+    mesaNumero: normalizedMesa.mesaNumero,
+    mesaAula: normalizedMesa.mesaAula,
+  });
 
   const supabase = createSupabaseServerClient();
   const { data: existingEntry, error: selectError } = await supabase

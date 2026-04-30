@@ -11,6 +11,7 @@ Aplicacion web de votacion escolar construida con:
 La app permite:
 
 - registrar acceso por documento (DNI o carnet de extranjeria) antes de votar
+- validar que el documento pertenezca a la mesa seleccionada usando un padron CSV
 - votar por una lista activa
 - registrar voto en blanco
 - confirmar antes de guardar
@@ -80,6 +81,9 @@ npm install
 
 3. Abre el SQL Editor de Supabase y ejecuta el contenido de `supabase/schema.sql`.
 
+   Para instalaciones existentes, ejecuta tambien `supabase/migrate_eligible_voters.sql` antes
+   de usar la validacion por padron.
+
 4. Crea el archivo `.env.local` tomando como base `.env.local.example`.
 
 ```env
@@ -104,7 +108,7 @@ npm run dev
 ## Como probar
 
 1. Entra a `/`.
-2. Ingresa un documento valido: DNI (8 digitos) o carnet de extranjeria (9 digitos), y pulsa `Aceptar y votar`.
+2. Ingresa un documento valido de 7 a 9 digitos, y pulsa `Aceptar y votar`.
 3. Selecciona una lista o `Voto en blanco`.
 4. Pulsa `Confirmar voto`.
 5. Acepta la confirmacion.
@@ -117,11 +121,12 @@ npm run dev
 ## Decisiones de arquitectura
 
 - La insercion de votos se hace en `POST /api/votes`.
-- La habilitacion por documento se hace en `POST /api/voter-access`.
+- La habilitacion por documento se hace en `POST /api/voter-access` y valida el padron `eligible_voters`.
 - Las consultas del dashboard se concentran en `src/services/votes.js`.
 - La configuracion de eleccion se separa en `election_settings` para poder abrir o cerrar la votacion.
 - El control de duplicidad se resuelve con `voter_access` y la columna unica `votes.student_dni` (documento del alumno).
 - El dashboard usa credenciales simples por cookie `httpOnly`, sin depender aun de Supabase Auth.
+- El Flash Electoral reutiliza la misma sesion administrativa del dashboard.
 - Si luego quieres escalar, puedes migrar esta capa a Supabase Auth sin reestructurar la app.
 
 ## Notas sobre Supabase
@@ -135,6 +140,26 @@ El SQL incluido crea politicas RLS abiertas para `anon` porque el sistema, por a
 - leer votos para el dashboard
 
 Cuando agregues autenticacion admin, lo correcto es restringir la lectura de votos y la administracion del proceso a usuarios autenticados con permisos administrativos.
+
+La tabla `eligible_voters` no tiene politicas publicas para proteger el padron de DNIs. La app la
+consulta desde el servidor usando `SUPABASE_SERVICE_ROLE_KEY`.
+
+## Cargar padron de DNI por mesa
+
+Ejecuta `supabase/migrate_eligible_voters.sql` si tu base ya existe. Luego importa un CSV en la tabla
+`eligible_voters` desde Supabase. Puedes usar `supabase/eligible_voters_template.csv` como plantilla:
+
+```csv
+dni,mesa_numero,mesa_aula,student_name
+12345678,1,1AS,Alumno 1
+87654321,2,1BS,Alumno 2
+```
+
+`student_name` es opcional. `mesa_aula` debe coincidir con una de estas opciones: `1AS`, `1BS`,
+`2AS`, `2BS`, `3AS`, `3BS`, `4TO`.
+
+Si un DNI existe en el padron pero intenta ingresar por otra mesa, el sistema bloquea el acceso antes
+de llegar a la pantalla de voto.
 
 ## Activar auditoria en instalaciones existentes
 

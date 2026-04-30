@@ -27,7 +27,7 @@ export default async function VotePage({ searchParams }) {
   const resolvedSearchParams = await searchParams;
   const voterDni = normalizeDni(resolvedSearchParams?.dni || "");
   const hasAdminAccess = await hasAdminSession();
-  const hasValidDocument = /^\d{8,9}$/.test(voterDni);
+  const hasValidDocument = /^\d{7,9}$/.test(voterDni);
   const previewMode = hasAdminAccess && !hasValidDocument;
 
   if (!hasValidDocument && !hasAdminAccess) {

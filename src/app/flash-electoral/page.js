@@ -4,6 +4,7 @@ import {
   getCommitteeVisualData,
   getListDisplayName,
 } from "@/lib/committee-visuals";
+import { requireAdminSession } from "@/lib/admin-auth";
 import { getElectionSettings } from "@/services/election";
 import { getVotingResults } from "@/services/votes";
 import Image from "next/image";
@@ -30,6 +31,8 @@ function getLogoInitials(visualData, listDisplayName, candidateDisplayName, comm
 }
 
 export default async function FlashElectoralPage() {
+  await requireAdminSession("/flash-electoral");
+
   const [results, settings] = await Promise.all([getVotingResults(), getElectionSettings()]);
   const activeCommittees = results.resultsByCommittee.filter((committee) => committee.active);
 

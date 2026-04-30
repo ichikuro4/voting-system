@@ -6,7 +6,7 @@ create table if not exists voter_access (
   has_voted boolean not null default false,
   created_at timestamptz not null default timezone('utc', now()),
   voted_at timestamptz,
-  constraint voter_access_dni_check check (dni ~ '^[0-9]{8,9}$')
+  constraint voter_access_dni_check check (dni ~ '^[0-9]{7,9}$')
 );
 
 alter table if exists voter_access enable row level security;
@@ -14,7 +14,7 @@ alter table voter_access
   drop constraint if exists voter_access_dni_check;
 alter table voter_access
   add constraint voter_access_dni_check
-  check (dni ~ '^[0-9]{8,9}$');
+  check (dni ~ '^[0-9]{7,9}$');
 
 alter table votes add column if not exists student_dni text;
 
@@ -35,7 +35,7 @@ alter table votes
 
 alter table votes
   add constraint votes_student_dni_check
-  check (student_dni is null or student_dni ~ '^[0-9]{8,9}$');
+  check (student_dni is null or student_dni ~ '^[0-9]{7,9}$');
 
 create unique index if not exists votes_student_dni_unique_idx
 on votes(student_dni)

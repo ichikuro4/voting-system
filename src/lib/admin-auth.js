@@ -78,10 +78,10 @@ export async function hasAdminSession() {
   return timingSafeEqual(expected, actual);
 }
 
-export async function requireAdminSession() {
+export async function requireAdminSession(nextPath = ADMIN_DASHBOARD_PATH) {
   const authenticated = await hasAdminSession();
 
   if (!authenticated) {
-    redirect(`${ADMIN_LOGIN_PATH}?next=${encodeURIComponent(ADMIN_DASHBOARD_PATH)}`);
+    redirect(`${ADMIN_LOGIN_PATH}?next=${encodeURIComponent(nextPath)}`);
   }
 }
