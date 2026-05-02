@@ -1,16 +1,16 @@
 const committeeVisualConfig = {
-  "Lista N° 1 - Maria Luisa Oliva Vásquez": {
+  "Lista N° 1 - Rosa Valeria Ramírez Rojas": {
     logoLabel: "BRX",
     logoImageSrc: "/lista-1-logo.png",
     candidateImageSrc: "/lista-1-foto.webp",
   },
-  "Lista N° 2 - Sol De María Anticona Gutiérrez": {
-    logoLabel: "UE",
+  "Lista N° 2 - Cesar Augusto Ruiz Labrin": {
+    logoLabel: "UNE",
     logoImageSrc: "/lista-2-logo.png",
     candidateImageSrc: "/lista-2-foto.webp",
   },
   "Union Estudiantil": {
-    logoLabel: "UE",
+    logoLabel: "UNE",
     logoImageSrc: "/lista-2-logo.png",
     candidateImageSrc: "/lista-2-foto.webp",
   },
@@ -43,7 +43,7 @@ function getFallbackVisualByName(name) {
     normalizedName.includes("unión estudiantil")
   ) {
     return {
-      logoLabel: "UE",
+      logoLabel: "UNE",
       logoImageSrc: "/lista-2-logo.png",
       candidateImageSrc: "/lista-2-foto.webp",
     };

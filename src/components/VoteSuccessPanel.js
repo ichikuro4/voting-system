@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const REDIRECT_SECONDS = 6;
+const REDIRECT_SECONDS = 20;
 
 export default function VoteSuccessPanel() {
   const router = useRouter();
@@ -54,14 +53,6 @@ export default function VoteSuccessPanel() {
         </p>
       </div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <Link
-          href="/"
-          className="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
-        >
-          Siguiente alumno
-        </Link>
-      </div>
     </section>
   );
 }
