@@ -7,6 +7,7 @@
 -- 3AS -> mesa 5
 -- 3BS -> mesa 6
 -- 4TO -> mesa 7
+-- 5TO -> mesa 8
 
 alter table voter_access
   add column if not exists mesa_numero smallint,
@@ -21,7 +22,7 @@ alter table voter_access
 
 alter table voter_access
   add constraint voter_access_mesa_numero_check
-  check (mesa_numero is null or mesa_numero between 1 and 7);
+  check (mesa_numero is null or mesa_numero between 1 and 8);
 
 alter table voter_access
   drop constraint if exists voter_access_mesa_aula_check;
@@ -30,7 +31,7 @@ alter table voter_access
   add constraint voter_access_mesa_aula_check
   check (
     mesa_aula is null
-    or mesa_aula in ('1AS', '1BS', '2AS', '2BS', '3AS', '3BS', '4TO')
+    or mesa_aula in ('1AS', '1BS', '2AS', '2BS', '3AS', '3BS', '4TO', '5TO')
   );
 
 alter table voter_access
@@ -47,6 +48,7 @@ alter table voter_access
     or (mesa_numero = 5 and mesa_aula = '3AS')
     or (mesa_numero = 6 and mesa_aula = '3BS')
     or (mesa_numero = 7 and mesa_aula = '4TO')
+    or (mesa_numero = 8 and mesa_aula = '5TO')
   );
 
 create index if not exists voter_access_mesa_numero_idx on voter_access(mesa_numero);

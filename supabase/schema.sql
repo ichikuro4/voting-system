@@ -33,9 +33,9 @@ create table eligible_voters (
   student_name text,
   created_at timestamptz not null default timezone('utc', now()),
   constraint eligible_voters_dni_check check (dni ~ '^[0-9]{7,9}$'),
-  constraint eligible_voters_mesa_numero_check check (mesa_numero between 1 and 7),
+  constraint eligible_voters_mesa_numero_check check (mesa_numero between 1 and 8),
   constraint eligible_voters_mesa_aula_check check (
-    mesa_aula in ('1AS', '1BS', '2AS', '2BS', '3AS', '3BS', '4TO')
+    mesa_aula in ('1AS', '1BS', '2AS', '2BS', '3AS', '3BS', '4TO', '5TO')
   ),
   constraint eligible_voters_mesa_mapping_check check (
     (mesa_numero = 1 and mesa_aula = '1AS')
@@ -45,6 +45,7 @@ create table eligible_voters (
     or (mesa_numero = 5 and mesa_aula = '3AS')
     or (mesa_numero = 6 and mesa_aula = '3BS')
     or (mesa_numero = 7 and mesa_aula = '4TO')
+    or (mesa_numero = 8 and mesa_aula = '5TO')
   )
 );
 
@@ -56,10 +57,10 @@ create table voter_access (
   created_at timestamptz not null default timezone('utc', now()),
   voted_at timestamptz,
   constraint voter_access_dni_check check (dni ~ '^[0-9]{7,9}$'),
-  constraint voter_access_mesa_numero_check check (mesa_numero is null or mesa_numero between 1 and 7),
+  constraint voter_access_mesa_numero_check check (mesa_numero is null or mesa_numero between 1 and 8),
   constraint voter_access_mesa_aula_check check (
     mesa_aula is null
-    or mesa_aula in ('1AS', '1BS', '2AS', '2BS', '3AS', '3BS', '4TO')
+    or mesa_aula in ('1AS', '1BS', '2AS', '2BS', '3AS', '3BS', '4TO', '5TO')
   ),
   constraint voter_access_mesa_mapping_check check (
     (mesa_numero is null and mesa_aula is null)
@@ -70,6 +71,7 @@ create table voter_access (
     or (mesa_numero = 5 and mesa_aula = '3AS')
     or (mesa_numero = 6 and mesa_aula = '3BS')
     or (mesa_numero = 7 and mesa_aula = '4TO')
+    or (mesa_numero = 8 and mesa_aula = '5TO')
   )
 );
 

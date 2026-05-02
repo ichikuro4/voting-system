@@ -6,6 +6,7 @@ export const MESA_OPTIONS = [
   { mesaNumero: 5, mesaAula: "3AS", label: "3AS - Mesa 5" },
   { mesaNumero: 6, mesaAula: "3BS", label: "3BS - Mesa 6" },
   { mesaNumero: 7, mesaAula: "4TO", label: "4TO - Mesa 7" },
+  { mesaNumero: 8, mesaAula: "5TO", label: "5TO - Mesa 8" },
 ];
 
 export const MESA_AULA_TO_NUMERO = Object.freeze(

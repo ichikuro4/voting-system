@@ -156,7 +156,7 @@ dni,mesa_numero,mesa_aula,student_name
 ```
 
 `student_name` es opcional. `mesa_aula` debe coincidir con una de estas opciones: `1AS`, `1BS`,
-`2AS`, `2BS`, `3AS`, `3BS`, `4TO`.
+`2AS`, `2BS`, `3AS`, `3BS`, `4TO`, `5TO`.
 
 Si un DNI existe en el padron pero intenta ingresar por otra mesa, el sistema bloquea el acceso antes
 de llegar a la pantalla de voto.
